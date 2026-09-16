@@ -356,7 +356,8 @@ body.admin-body {
   overflow: hidden;
 }
 #share-card-qr-canvas svg,
-#share-card-qr-canvas img {
+#share-card-qr-canvas img,
+#share-card-qr-canvas canvas {
   width: 100% !important;
   height: 100% !important;
   display: block;
