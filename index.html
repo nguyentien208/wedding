@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thiệp Cưới Online — Minh Anh ❤️ Khánh Huyền</title>
+  
+  <meta name="description" content="Thiệp cưới Hẹn Thề - Minh Anh & Khánh Huyền 10/04/2027.">
+  <meta property="og:title" content="Lễ Cưới: Minh Anh ❤️ Khánh Huyền">
+  <meta property="og:description" content="Trân trọng kính mời bạn đến chung vui cùng gia đình chúng mình vào ngày 10/04/2027.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80">
+
+  <!-- Google Fonts: Be Vietnam Pro, Montserrat, Playfair Display, Caveat, Alex Brush -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Be+Vietnam+Pro:wght@400;500;600;700&family=Caveat:wght@500;600;700&family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- CDNs -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+
+  <!-- Custom Stylesheets -->
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="stylesheet" href="./assets/css/animations.css">
+</head>
+<body>
+
+  <!-- SPLIT DOOR PAGE LOADER (HAI CÁNH CỬA MỞ RA) -->
+  <div id="page-loading-skeleton">
+    <div class="loader-door loader-door-left"></div>
+    <div class="loader-door loader-door-right"></div>
+    <div class="loader-center-content">
+      <div class="loader-disc-wrapper">
+        <div class="loader-disc-icon">🎀</div>
+      </div>
+      <div class="loader-title">ĐANG TẢI THIỆP CƯỚI...</div>
+      <div class="loader-subtitle">Minh Anh ❤️ Khánh Huyền</div>
+    </div>
+  </div>
+
+  <!-- MOBILE CONTAINER CENTERED ON DESKTOP -->
+  <div class="app-container">
+
+    <!-- ==========================================
+         TOP FLOATING HEADER BAR
+       ========================================== -->
+    <div class="top-header-bar">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <button class="circle-btn-white" onclick="history.back()" title="Quay lại">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <div class="header-script-overlay">
+          <div class="header-script-line1">Save the date</div>
+          <div class="header-script-line2">Minh Anh</div>
+        </div>
+      </div>
+
+      <button id="music-toggle-btn" class="circle-btn-white" title="Phát nhạc">
+        <div class="equalizer-icon" id="music-toggle-icon">
+          <div class="equalizer-bar"></div>
+          <div class="equalizer-bar"></div>
+          <div class="equalizer-bar"></div>
+        </div>
+      </button>
+    </div>
+
+    <!-- FLOATING QUICK MENU POPUP -->
+    <div id="quick-menu-popup" class="quick-menu-popup">
+      <div class="quick-menu-item" onclick="scrollToSection('calendar')">
+        <span class="quick-menu-label">Thời gian</span>
+        <div class="quick-menu-icon-btn"><i class="far fa-calendar-alt"></i></div>
+      </div>
+
+      <div class="quick-menu-item" onclick="scrollToSection('address')">
+        <span class="quick-menu-label">Địa điểm</span>
+        <div class="quick-menu-icon-btn"><i class="fas fa-map-marker-alt"></i></div>
+      </div>
+
+      <div class="quick-menu-item" onclick="toggleRSVPModal(true)">
+        <span class="quick-menu-label">Xác nhận tham gia</span>
+        <div class="quick-menu-icon-btn"><i class="far fa-check-circle"></i></div>
+      </div>
+    </div>
+
+    <!-- FLOATING BOTTOM BAR -->
+    <div class="floating-bottom-bar">
+      <button class="bottom-btn-gray" onclick="window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'})" title="Cuộn xuống">
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      
+      <div class="quick-wish-input-wrapper">
+        <input type="text" id="quick-wish-input" placeholder="Gửi lời chúc...">
+      </div>
+      
+      <button class="bottom-btn-gray" onclick="scrollToSection('wishes')" title="Lời chúc">
+        <i class="far fa-heart"></i>
+      </button>
+      
+      <button onclick="toggleQuickMenu()" class="bottom-btn-red-menu" id="bottom-menu-btn" title="Menu">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+
+    <main id="main-content">
+
+      <!-- ==========================================
+           1. HERO PHOTO & WHITE ARCH DOME
+         ========================================== -->
+      <section class="hero-photo-container" id="hero">
+        <img src="./assets/img/banner.webp" alt="Couple Main Photo" class="hero-photo-img">
+      </section>
+
+      <div class="hero-arch-card" data-aos="fade-up">
+        <!-- Vector Red Ribbon Bow at top peak -->
+        <div class="ribbon-svg-wrapper">
+          <img src="./assets/img/icon_now.webp" alt="Ribbon Bow" class="ribbon-img">
+        </div>
+
+        <!-- WEDDING Title Image -->
+        <div style="margin: 0px 0 16px;">
+          <img src="./assets/img/chu_wedding.webp" alt="Wedding Title" class="wedding-title-img">
+        </div>
+
+        <!-- Calligraphic Couple Names: Minh Anh - Khánh Huyền -->
+        <div class="names-script-row">
+          <span id="script-groom-name">Minh Anh</span>
+          <span class="names-dash">-</span>
+          <span id="script-bride-name">Khánh Huyền</span>
+        </div>
+
+        <!-- Subtitle Underline -->
+        <div>
+          <div class="invitation-label-underline">THƯ MỜI TIỆC CƯỚI</div>
+        </div>
+
+        <!-- Time & Date -->
+        <div class="event-day-time-text">CHỦ NHẬT - 09:30</div>
+
+        <div>
+          <div class="event-date-underline">10.04.2027</div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           2. NHÀ TRAI - NHÀ GÁI
+         ========================================== -->
+      <section class="parents-section" id="parents">
+        <div class="parents-grid" data-aos="fade-up">
+          <div>
+            <div class="parents-column-title">NHÀ TRAI</div>
+            <div class="parents-names">
+              ÔNG PHẠM VĂN LONG<br>
+              BÀ LÊ THỊ HỒNG
+            </div>
+            <div id="venue-groom" class="parents-venue">Khách sạn Miwedi</div>
+          </div>
+
+          <div>
+            <div class="parents-column-title">NHÀ GÁI</div>
+            <div class="parents-names">
+              ÔNG VŨ ĐÌNH NAM<br>
+              BÀ TRẦN THÚY HẰNG
+            </div>
+            <div id="venue-bride" class="parents-venue">Khách sạn Miwedi</div>
+          </div>
+        </div>
+
+        <div class="portraits-container" data-aos="zoom-in">
+          <div class="portrait-photos-grid">
+            <div class="portrait-img-frame">
+              <img id="groom-portrait-img" src="./assets/img/men.webp" alt="Groom Portrait">
+            </div>
+            <div class="portrait-img-frame">
+              <img id="bride-portrait-img" src="./assets/img/girl.webp" alt="Bride Portrait">
+            </div>
+          </div>
+
+          <div class="portrait-labels-grid">
+            <div class="portrait-label">GROOM</div>
+            <div class="portrait-label">BRIDE</div>
+          </div>
+
+          <div class="portrait-names-flex">
+            <div id="groom-portrait-name" class="portrait-name">Minh Anh</div>
+            <div class="portrait-center-bow-icon">
+              <img src="./assets/img/icon_now.webp" alt="Bow" style="width: 20px; height: auto;">
+            </div>
+            <div id="bride-portrait-name" class="portrait-name">Khánh Huyền</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           3. L.O.V.E & LỄ THÀNH HÔN
+         ========================================== -->
+      <section class="love-section" id="love">
+        <h2 class="love-title" data-aos="fade-down">L . O . V . E</h2>
+        <img src="./assets/img/2.webp" alt="Couple Tuxedo" class="love-main-img" data-aos="zoom-in">
+
+        <div data-aos="fade-up">
+          <div class="we-got-married-text">We got married</div>
+          <h3 class="le-thanh-hon-title">LỄ THÀNH HÔN</h3>
+          
+          <div class="chu-nhat-title">CHỦ NHẬT</div>
+
+          <div class="date-banner-flex">
+            <div class="date-side-label">THÁNG 04</div>
+            <div class="date-big-number">10</div>
+            <div class="date-side-label">NĂM 2027</div>
+          </div>
+
+          <div class="time-big-text">18:00</div>
+          <div id="lunar-date-text" class="lunar-date-text">Tức ngày 25 tháng 02 năm Đinh Mùi</div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           4. CALENDAR DOME ARCH
+         ========================================== -->
+      <section class="calendar-section" id="calendar">
+        <!-- SVG Curved Arc Title WELCOME TO OUR WEDDING -->
+        <div class="welcome-curved-title-wrapper" data-aos="fade-down">
+          <svg viewBox="0 0 400 160" class="welcome-arch-svg">
+            <path id="archCurve" d="M 30,140 A 170,95 0 0,1 370,140" fill="none" />
+            <text font-family="'Playfair Display', serif" font-size="1.5rem" font-weight="400" fill="#222222" letter-spacing="4">
+              <textPath href="#archCurve" startOffset="50%" text-anchor="middle">
+                WELCOME TO OUR WEDDING
+              </textPath>
+            </text>
+          </svg>
+        </div>
+        
+        <div class="dome-calendar-card" data-aos="zoom-in">
+          <img src="./assets/img/banner.webp" alt="Dome Arch Image" class="dome-calendar-img">
+          
+          <!-- Translucent White Circle Overlay -->
+          <div class="calendar-circle-overlay">
+            <div class="calendar-grid-circle">
+              <div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div>
+              <div>7</div><div>8</div><div>9</div><div>10</div><div>11</div><div>12</div><div>13</div>
+              <div>14</div><div>15</div><div>16</div><div>17</div><div>18</div><div class="active-heart-day">19</div><div>20</div>
+              <div>21</div><div>22</div><div>23</div><div>24</div><div>25</div><div>26</div><div>27</div>
+              <div>28</div><div>29</div><div>30</div><div>31</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="calendar-quote-script" data-aos="fade-up">
+          Chung tay dựng một mái nhà,<br>Sớm khuya có bạn, đường xa cũng gần
+        </div>
+      </section>
+
+      <!-- ==========================================
+           5. ADDRESS & MAP
+         ========================================== -->
+      <section class="address-section" id="address">
+        <div class="address-grid" data-aos="fade-up">
+          <div>
+            <img src="./assets/img/2.webp" alt="Address Image" class="address-photo-img">
+          </div>
+          
+          <div class="address-info-col">
+            <h2 class="address-title">ADDRESS</h2>
+            <div id="address-venue" class="address-venue-title">KHÁCH SẠN MIWEDI</div>
+            <p class="address-venue-sub">Khách sạn Miwedi</p>
+
+            <div class="map-thumbnail-box">
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.676632420078!2d105.84117!3d21.0055!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ac76ccab6dd7%3A0x676e10ed03b306b8!2zSMOgIE7hu5lp!5e0!3m2!1svi!2s!4v1620000000000!5m2!1svi!2s" style="width: 100%; height: 100%; border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           6. ALBUM GALLERY
+         ========================================== -->
+      <section class="gallery-section" id="gallery">
+        <div class="gallery-bg-photo-wrapper" data-aos="fade-up">
+          <img src="./assets/img/banner.webp" alt="Background Photo" class="gallery-bg-photo">
+          
+          <div class="gallery-stacked-card gallery-card-top">
+            <img src="./assets/img/banner.webp" alt="Gallery Photo 1">
+          </div>
+
+          <div class="gallery-stacked-card gallery-card-bottom">
+            <img src="./assets/img/2.webp" alt="Gallery Photo 2">
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           7. COUNTDOWN 4 RED BOXES
+         ========================================== -->
+      <section class="countdown-section" id="countdown">
+        <div class="countdown-boxes-4" data-aos="zoom-in">
+          <div class="red-cd-box">
+            <div id="cd-days" class="red-cd-number">0</div>
+            <div class="red-cd-label">Ngày</div>
+          </div>
+          <div class="red-cd-box">
+            <div id="cd-hours" class="red-cd-number">0</div>
+            <div class="red-cd-label">Giờ</div>
+          </div>
+          <div class="red-cd-box">
+            <div id="cd-minutes" class="red-cd-number">0</div>
+            <div class="red-cd-label">Phút</div>
+          </div>
+          <div class="red-cd-box">
+            <div id="cd-seconds" class="red-cd-number">0</div>
+            <div class="red-cd-label">Giây</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           8. BOTTOM HERO & RED BUTTON
+         ========================================== -->
+      <section class="bottom-hero-section">
+        <img src="./assets/img/banner.webp" alt="Bottom Hero" class="bottom-hero-img">
+      </section>
+
+      <div class="thanks-watermark">THANKS</div>
+
+
+    </main>
+
+  <!-- RSVP MODAL FORM -->
+  <div id="rsvp-modal-overlay" class="modal-overlay">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="toggleRSVPModal(false)" title="Đóng">✕</button>
+      
+      <div class="modal-header">
+        <h3 class="modal-title">Xác nhận tham dự</h3>
+        <p class="modal-subtitle">Bản xem trước — thông tin không được lưu</p>
+      </div>
+
+      <form id="rsvp-modal-form" class="modal-form">
+        <div class="form-group">
+          <label class="form-label">Họ và tên</label>
+          <input type="text" id="modal-rsvp-name" class="form-input" placeholder="Nhập tên của bạn" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Số điện thoại</label>
+          <input type="tel" id="modal-rsvp-phone" class="form-input" placeholder="Nhập số điện thoại (không bắt buộc)">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Bạn sẽ tham dự chứ?</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="modal_rsvp_attend" value="attending" checked>
+              <span class="radio-custom"></span>
+              <span class="radio-text">Có, tôi sẽ tham dự</span>
+            </label>
+
+            <label class="radio-option">
+              <input type="radio" name="modal_rsvp_attend" value="not_attending">
+              <span class="radio-custom"></span>
+              <span class="radio-text">Tôi bận, rất tiếc không thể tham dự</span>
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit-red">Gửi xác nhận</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- CDN Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Custom JS Modules -->
+  <script src="./assets/js/config.js"></script>
+  <script src="./assets/js/supabase.js"></script>
+  <script src="./assets/js/wedding-context.js"></script>
+  <script src="./assets/js/services/wedding-service.js"></script>
+  <script src="./assets/js/countdown.js"></script>
+  <script src="./assets/js/music.js"></script>
+  <script src="./assets/js/main.js"></script>
+  
+  <script>
+    Fancybox.bind("[data-fancybox]", {});
+  </script>
+</body>
+</html>

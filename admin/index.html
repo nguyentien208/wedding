@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — Quản Trị Thiệp Cưới</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Admin Custom CSS -->
+  <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body class="admin-body">
+
+  <!-- SIDEBAR NAVIGATION -->
+  <aside id="admin-sidebar" class="admin-sidebar">
+    <div class="admin-sidebar-header">
+      <i class="fas fa-heart text-wine" style="font-size: 24px; color: var(--admin-accent);"></i>
+      <span class="admin-sidebar-logo">WEDDING ADMIN</span>
+    </div>
+    
+    <ul class="admin-nav">
+      <li class="admin-nav-item">
+        <a class="admin-nav-link active" data-tab="dashboard">
+          <i class="fas fa-chart-line"></i> Dashboard
+        </a>
+      </li>
+      <li class="admin-nav-item">
+        <a class="admin-nav-link" data-tab="wedding">
+          <i class="fas fa-user-friends"></i> Thông tin Cặp đôi
+        </a>
+      </li>
+      <li class="admin-nav-item">
+        <a class="admin-nav-link" data-tab="story">
+          <i class="fas fa-history"></i> Love Story
+        </a>
+      </li>
+      <li class="admin-nav-item">
+        <a class="admin-nav-link" data-tab="events">
+          <i class="fas fa-calendar-alt"></i> Sự kiện lễ cưới
+        </a>
+      </li>
+      <li class="admin-nav-item">
+        <a class="admin-nav-link" data-tab="gallery">
+          <i class="fas fa-images"></i> Album ảnh cưới
+        </a>
+      </li>
+      <li class="admin-nav-item">
+        <a class="admin-nav-link" data-tab="rsvp">
+          <i class="fas fa-envelope-open-text"></i> Danh sách RSVP
+        </a>
+      </li>
+      <li class="admin-nav-item">
+        <a class="admin-nav-link" data-tab="wishes">
+          <i class="fas fa-comments"></i> Quản lý Lời chúc
+        </a>
+      </li>
+      <li class="admin-nav-item">
+        <a class="admin-nav-link" data-tab="music">
+          <i class="fas fa-music"></i> Nhạc nền
+        </a>
+      </li>
+      <li class="admin-nav-item">
+        <a class="admin-nav-link" data-tab="bank">
+          <i class="fas fa-qrcode"></i> Mừng cưới & QR
+        </a>
+      </li>
+      <li class="admin-nav-item" style="margin-top: 24px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 16px;">
+        <a class="admin-nav-link" onclick="AdminAuth.logout()" style="color: #F87171;">
+          <i class="fas fa-sign-out-alt"></i> Đăng xuất
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- MAIN CONTENT AREA -->
+  <main class="admin-main">
+    
+    <!-- TOP HEADER -->
+    <header class="admin-header">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <button id="admin-toggle-btn" class="admin-toggle-btn">
+          <i class="fas fa-bars"></i>
+        </button>
+        <h2 id="page-title" style="font-size: 1.1rem; font-weight: 700;">Tổng Quan Dashboard</h2>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <a id="btn-preview-wedding" target="_blank" class="btn-admin btn-admin-secondary btn-sm">
+          <i class="fas fa-external-link-alt"></i> XEM THIỆP
+        </a>
+        <span id="admin-user-email" style="font-size: 0.85rem; color: var(--admin-text-muted); font-weight: 500;">admin@wedding.com</span>
+      </div>
+    </header>
+
+    <!-- TAB CONTENT SECTIONS -->
+    <div class="admin-content">
+
+      <!-- ==========================================
+           TAB 1: DASHBOARD OVERVIEW
+         ========================================== -->
+      <div id="tab-dashboard" class="tab-pane active">
+        <div class="admin-grid-4">
+          <div class="metric-card">
+            <div>
+              <div class="metric-title">Tổng Xác Nhận RSVP</div>
+              <div id="metric-rsvp-count" class="metric-value">0</div>
+            </div>
+            <div class="metric-icon"><i class="fas fa-envelope-open-text"></i></div>
+          </div>
+
+          <div class="metric-card">
+            <div>
+              <div class="metric-title">Tổng Khách Tham Dự</div>
+              <div id="metric-guest-count" class="metric-value">0</div>
+            </div>
+            <div class="metric-icon" style="background: rgba(16, 185, 129, 0.1); color: #10B981;"><i class="fas fa-user-check"></i></div>
+          </div>
+
+          <div class="metric-card">
+            <div>
+              <div class="metric-title">Khách Không Tham Dự</div>
+              <div id="metric-not-attend-count" class="metric-value">0</div>
+            </div>
+            <div class="metric-icon" style="background: rgba(239, 68, 68, 0.1); color: #EF4444;"><i class="fas fa-user-times"></i></div>
+          </div>
+
+          <div class="metric-card">
+            <div>
+              <div class="metric-title">Tổng Lời Chúc</div>
+              <div id="metric-wishes-count" class="metric-value">0</div>
+            </div>
+            <div class="metric-icon" style="background: rgba(245, 158, 11, 0.1); color: #F59E0B;"><i class="fas fa-heart"></i></div>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3 class="admin-card-title">THÔNG TIN ĐÁM CƯỚI HIỆN TẠI</h3>
+            <button class="btn-admin btn-admin-primary btn-sm" onclick="switchTab('wedding')">
+              <i class="fas fa-edit"></i> Chỉnh sửa
+            </button>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; font-size: 0.9rem;">
+            <div><strong>Chú Rể:</strong> <span id="dash-groom-name">--</span></div>
+            <div><strong>Cô Dâu:</strong> <span id="dash-bride-name">--</span></div>
+            <div><strong>Ngày Cưới:</strong> <span id="dash-wedding-date">--</span></div>
+            <div><strong>Slug Thiệp:</strong> <code id="dash-wedding-slug">--</code></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           TAB 2: THÔNG TIN CẶP ĐÔI
+         ========================================== -->
+      <div id="tab-wedding" class="tab-pane" style="display: none;">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3 class="admin-card-title">CHỈNH SỬA THÔNG TIN CẶP ĐÔI</h3>
+          </div>
+          <form id="form-wedding-info">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Tên Chú Rể</label>
+                <input type="text" id="edit-groom-name" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" required>
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Tên Cô Dâu</label>
+                <input type="text" id="edit-bride-name" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" required>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Ngày Cưới (ISO format / Datetime)</label>
+                <input type="datetime-local" id="edit-wedding-date" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" required>
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Link YouTube Video Kỷ Niệm</label>
+                <input type="url" id="edit-video-url" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="https://www.youtube.com/embed/...">
+              </div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Lời Ngỏ (Intro Text)</label>
+              <textarea id="edit-intro-text" rows="4" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" required></textarea>
+            </div>
+
+            <button type="submit" class="btn-admin btn-admin-primary">
+              <i class="fas fa-save"></i> LƯU THAY ĐỔI ❤️
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           TAB 3: LOVE STORY
+         ========================================== -->
+      <div id="tab-story" class="tab-pane" style="display: none;">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3 class="admin-card-title">HÀNH TRÌNH TÌNH YÊU (LOVE STORY)</h3>
+            <button class="btn-admin btn-admin-primary btn-sm" onclick="openStoryModal()">
+              <i class="fas fa-plus"></i> THÊM MỐC THỜI GIAN
+            </button>
+          </div>
+          
+          <div class="admin-table-container">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Năm</th>
+                  <th>Tiêu đề</th>
+                  <th>Mô tả</th>
+                  <th>Ảnh</th>
+                  <th>Hành động</th>
+                </tr>
+              </thead>
+              <tbody id="admin-story-table-body">
+                <!-- JS Render -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           TAB 4: SỰ KIỆN LỄ CƯỚI
+         ========================================== -->
+      <div id="tab-events" class="tab-pane" style="display: none;">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3 class="admin-card-title">THÔNG TIN CÁC SỰ KIỆN LỄ CƯỚI</h3>
+            <button class="btn-admin btn-admin-primary btn-sm" onclick="openEventModal()">
+              <i class="fas fa-plus"></i> THÊM SỰ KIỆN
+            </button>
+          </div>
+
+          <div class="admin-table-container">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Tiêu đề</th>
+                  <th>Ngày & Giờ</th>
+                  <th>Địa điểm</th>
+                  <th>Địa chỉ</th>
+                  <th>Hành động</th>
+                </tr>
+              </thead>
+              <tbody id="admin-events-table-body">
+                <!-- JS Render -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           TAB 5: ALBUM ẢNH CƯỚI
+         ========================================== -->
+      <div id="tab-gallery" class="tab-pane" style="display: none;">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3 class="admin-card-title">QUẢN LÝ ALBUM ẢNH CƯỚI</h3>
+            <label class="btn-admin btn-admin-primary btn-sm" style="cursor: pointer;">
+              <i class="fas fa-upload"></i> UPLOAD ẢNH CƯỚI
+              <input type="file" id="gallery-file-input" multiple accept="image/jpeg,image/png,image/webp,image/avif" style="display: none;" onchange="handleGalleryUpload(this)">
+            </label>
+          </div>
+
+          <div id="gallery-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px;">
+            <!-- JS Render Gallery Grid -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           TAB 6: DANH SÁCH RSVP
+         ========================================== -->
+      <div id="tab-rsvp" class="tab-pane" style="display: none;">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3 class="admin-card-title">DANH SÁCH XÁC NHẬN THAM DỰ (RSVP)</h3>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn-admin btn-admin-secondary btn-sm" onclick="filterRSVP('all')">Tất cả</button>
+              <button class="btn-admin btn-admin-secondary btn-sm" onclick="filterRSVP('attending')">Tham dự</button>
+              <button class="btn-admin btn-admin-secondary btn-sm" onclick="filterRSVP('not_attending')">Không tham dự</button>
+            </div>
+          </div>
+
+          <div class="admin-table-container">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Khách mời</th>
+                  <th>Số điện thoại</th>
+                  <th>Trạng thái</th>
+                  <th>Số lượng</th>
+                  <th>Lời nhắn</th>
+                  <th>Ngày gửi</th>
+                  <th>Xóa</th>
+                </tr>
+              </thead>
+              <tbody id="admin-rsvp-table-body">
+                <!-- JS Render -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           TAB 7: QUẢN LÝ LỜI CHÚC (WISHES)
+         ========================================== -->
+      <div id="tab-wishes" class="tab-pane" style="display: none;">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3 class="admin-card-title">DUYỆT & QUẢN LÝ LỜI CHÚC</h3>
+          </div>
+
+          <div class="admin-table-container">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Khách gửi</th>
+                  <th>Lời chúc</th>
+                  <th>Trạng thái</th>
+                  <th>Ngày gửi</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="admin-wishes-table-body">
+                <!-- JS Render -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           TAB 8: NHẠC NỀN
+         ========================================== -->
+      <div id="tab-music" class="tab-pane" style="display: none;">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3 class="admin-card-title">CÀI ĐẶT NHẠC NỀN THIỆP CƯỚI</h3>
+          </div>
+          <div style="max-width: 500px;">
+            <p style="font-size: 0.9rem; color: var(--admin-text-muted); margin-bottom: 20px;">
+              Quản lý bài hát phát tự động khi khách mở thiệp cưới.
+            </p>
+            <div id="music-status-box" style="margin-bottom: 20px; font-weight: 600;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           TAB 9: MỪNG CƯỚI & QR
+         ========================================== -->
+      <div id="tab-bank" class="tab-pane" style="display: none;">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3 class="admin-card-title">THÔNG TIN CHUYỂN KHOẢN & QR MỪNG CƯỚI</h3>
+          </div>
+          <p style="font-size: 0.9rem; color: var(--admin-text-muted);">
+            Thông tin mã QR Ngân hàng Nhà Trai và Nhà Gái.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- REUSABLE CONFIRMATION MODAL -->
+  <div id="confirm-modal" class="admin-modal-overlay">
+    <div class="admin-modal">
+      <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--admin-primary); margin-bottom: 12px;">XÁC NHẬN XÓA</h3>
+      <p id="confirm-modal-msg" style="font-size: 0.9rem; color: var(--admin-text-dark); margin-bottom: 24px;">Bạn có chắc chắn muốn xóa mục này?</p>
+      <div style="display: flex; justify-content: flex-end; gap: 12px;">
+        <button class="btn-admin btn-admin-secondary" onclick="closeConfirmModal()">Hủy</button>
+        <button id="confirm-modal-ok-btn" class="btn-admin btn-admin-danger">Xóa Ngay</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Supabase & Custom JS Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../assets/js/config.js"></script>
+  <script src="../assets/js/supabase.js"></script>
+  <script src="../assets/js/wedding-context.js"></script>
+  <script src="../assets/js/services/wedding-service.js"></script>
+  <script src="../assets/js/admin/auth.js"></script>
+  <script src="../assets/js/admin/admin-service.js"></script>
+  <script src="../assets/js/admin/admin.js"></script>
+</body>
+</html>
