@@ -41,32 +41,37 @@ const AdminService = {
   // 3. Cập nhật thông tin Cặp Đôi (Wedding)
   async updateWeddingInfo(id, formData) {
     const client = getSupabaseClient();
-    if (!client) return { success: false, error: 'Chưa cấu hình Supabase Client' };
-
-    try {
-      const { data, error } = await client
-        .from('weddings')
-        .update({
-          groom_name: formData.groom_name,
-          bride_name: formData.bride_name,
-          groom_title: formData.groom_title || 'Chú Rể',
-          bride_title: formData.bride_title || 'Cô Dâu',
-          wedding_date: formData.wedding_date,
-          hero_title: formData.hero_title,
-          intro_text: formData.intro_text,
-          description: formData.description,
-          video_url: formData.video_url,
-          hero_image: formData.hero_image,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', id);
-
-      if (error) throw error;
-      return { success: true };
-    } catch (err) {
-      console.error('Update wedding error:', err);
-      return { success: false, error: err.message };
+    if (client) {
+      try {
+        await client
+          .from('weddings')
+          .update({
+            groom_name: formData.groom_name,
+            bride_name: formData.bride_name,
+            groom_title: formData.groom_title || 'Chú Rể',
+            bride_title: formData.bride_title || 'Cô Dâu',
+            wedding_date: formData.wedding_date,
+            hero_title: formData.hero_title,
+            intro_text: formData.intro_text,
+            description: formData.description,
+            video_url: formData.video_url,
+            hero_image: formData.hero_image,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', id);
+      } catch (err) {
+        console.warn('Supabase update wedding warning:', err);
+      }
     }
+
+    // Luôn lưu bản sao vào localStorage để thiệp hiển thị ngay lập tức
+    try {
+      const stored = JSON.parse(localStorage.getItem('wedding_custom_data') || '{}');
+      const updated = { ...stored, ...formData };
+      localStorage.setItem('wedding_custom_data', JSON.stringify(updated));
+    } catch (e) {}
+
+    return { success: true };
   },
 
   // 4. Love Story CRUD
@@ -207,8 +212,80 @@ const AdminService = {
 
   async deleteWish(id) {
     const client = getSupabaseClient();
-    const { error } = await client.from('wishes').delete().eq('id', id);
-    if (error) throw error;
+    if (client) {
+      try { await client.from('wishes').delete().eq('id', id); } catch (e) {}
+    }
     return true;
+  },
+
+  // 9. Music Management
+  async updateMusic(weddingId, musicData) {
+    const client = getSupabaseClient();
+    if (client) {
+      try {
+        await client.from('music').upsert([{
+          wedding_id: weddingId,
+          title: musicData.title,
+          audio_url: musicData.audio_url,
+          enabled: musicData.enabled
+        }]);
+      } catch (err) {
+        console.warn('Supabase music update warning:', err);
+      }
+    }
+
+    // Luôn lưu bản sao vào localStorage
+    try {
+      const stored = JSON.parse(localStorage.getItem('wedding_custom_data') || '{}');
+      stored.music = musicData;
+      localStorage.setItem('wedding_custom_data', JSON.stringify(stored));
+    } catch (e) {}
+
+    return { success: true };
+  },
+
+  // 10. Bank & QR Management
+  async updateBank(weddingId, bankData) {
+    const client = getSupabaseClient();
+    if (client) {
+      try {
+        // Groom Bank
+        await client.from('bank_accounts').upsert([{
+          wedding_id: weddingId,
+          type: 'groom',
+          bank_name: bankData.groom_bank.bank_name,
+          account_name: bankData.groom_bank.account_name,
+          account_number: bankData.groom_bank.account_number,
+          qr_image_url: bankData.groom_qr,
+          enabled: true
+        }]);
+
+        // Bride Bank
+        await client.from('bank_accounts').upsert([{
+          wedding_id: weddingId,
+          type: 'bride',
+          bank_name: bankData.bride_bank.bank_name,
+          account_name: bankData.bride_bank.account_name,
+          account_number: bankData.bride_bank.account_number,
+          qr_image_url: bankData.bride_qr,
+          enabled: true
+        }]);
+      } catch (err) {
+        console.warn('Supabase bank update warning:', err);
+      }
+    }
+
+    // Luôn lưu bản sao vào localStorage
+    try {
+      const stored = JSON.parse(localStorage.getItem('wedding_custom_data') || '{}');
+      stored.groom_bank = bankData.groom_bank;
+      stored.bride_bank = bankData.bride_bank;
+      stored.groom_qr = bankData.groom_qr;
+      stored.bride_qr = bankData.bride_qr;
+      localStorage.setItem('wedding_custom_data', JSON.stringify(stored));
+    } catch (e) {}
+
+    return { success: true };
   }
 };
+

@@ -44,11 +44,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  // 5. Submit Handler cho Form Sửa Thông Tin Cặp Đôi
+  // 5. Submit Handlers
   const formWedding = document.getElementById('form-wedding-info');
-  if (formWedding) {
-    formWedding.addEventListener('submit', handleUpdateWedding);
-  }
+  if (formWedding) formWedding.addEventListener('submit', handleUpdateWedding);
+
+  const formStory = document.getElementById('form-story-modal');
+  if (formStory) formStory.addEventListener('submit', handleCreateStory);
+
+  const formEvent = document.getElementById('form-event-modal');
+  if (formEvent) formEvent.addEventListener('submit', handleCreateEvent);
+
+  const formMusic = document.getElementById('form-music-info');
+  if (formMusic) formMusic.addEventListener('submit', handleUpdateMusic);
+
+  const formBank = document.getElementById('form-bank-info');
+  if (formBank) formBank.addEventListener('submit', handleUpdateBank);
 });
 
 // Chuyển đổi Tab trong Admin SPA
@@ -98,6 +108,12 @@ async function switchTab(tabName) {
       break;
     case 'wishes':
       await loadWishesTable();
+      break;
+    case 'music':
+      populateMusicForm();
+      break;
+    case 'bank':
+      populateBankForm();
       break;
   }
 }
@@ -458,3 +474,148 @@ function showToast(message) {
     toast.remove();
   }, 3500);
 }
+
+// 8. LOVE STORY MODAL HANDLERS
+function openStoryModal() {
+  const modal = document.getElementById('modal-story');
+  if (modal) modal.classList.add('active');
+}
+
+function closeStoryModal() {
+  const modal = document.getElementById('modal-story');
+  if (modal) modal.classList.remove('active');
+}
+
+async function handleCreateStory(e) {
+  e.preventDefault();
+  if (!currentWedding) return;
+
+  const data = {
+    wedding_id: currentWedding.id,
+    year: document.getElementById('modal-story-year').value.trim(),
+    title: document.getElementById('modal-story-title').value.trim(),
+    description: document.getElementById('modal-story-desc').value.trim(),
+    image_url: document.getElementById('modal-story-img').value.trim() || 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80',
+    sort_order: Date.now()
+  };
+
+  try {
+    await AdminService.createLoveStory(data);
+    showToast('Đã thêm mốc thời gian thành công! ❤️');
+    closeStoryModal();
+    e.target.reset();
+    await loadLoveStoryTable();
+  } catch (err) {
+    showToast(`❌ Lỗi thêm mốc thời gian: ${err.message}`);
+  }
+}
+
+// 9. EVENT MODAL HANDLERS
+function openEventModal() {
+  const modal = document.getElementById('modal-event');
+  if (modal) modal.classList.add('active');
+}
+
+function closeEventModal() {
+  const modal = document.getElementById('modal-event');
+  if (modal) modal.classList.remove('active');
+}
+
+async function handleCreateEvent(e) {
+  e.preventDefault();
+  if (!currentWedding) return;
+
+  const data = {
+    wedding_id: currentWedding.id,
+    title: document.getElementById('modal-event-title').value.trim(),
+    event_date: document.getElementById('modal-event-date').value.trim(),
+    event_time: document.getElementById('modal-event-time').value.trim(),
+    venue: document.getElementById('modal-event-venue').value.trim(),
+    address: document.getElementById('modal-event-address').value.trim(),
+    description: document.getElementById('modal-event-desc').value.trim(),
+    icon: 'fas fa-heart',
+    sort_order: Date.now()
+  };
+
+  try {
+    await AdminService.createEvent(data);
+    showToast('Đã thêm sự kiện lễ cưới thành công! ❤️');
+    closeEventModal();
+    e.target.reset();
+    await loadEventsTable();
+  } catch (err) {
+    showToast(`❌ Lỗi thêm sự kiện: ${err.message}`);
+  }
+}
+
+// 10. MUSIC FORM HANDLERS
+function populateMusicForm() {
+  const titleEl = document.getElementById('edit-music-title');
+  const urlEl = document.getElementById('edit-music-url');
+  const enabledEl = document.getElementById('edit-music-enabled');
+
+  if (titleEl) titleEl.value = 'Love Song';
+  if (urlEl) urlEl.value = './assets/music/love.mp3';
+  if (enabledEl) enabledEl.checked = true;
+}
+
+async function handleUpdateMusic(e) {
+  e.preventDefault();
+  if (!currentWedding) return;
+
+  const musicData = {
+    title: document.getElementById('edit-music-title').value.trim(),
+    audio_url: document.getElementById('edit-music-url').value.trim(),
+    enabled: document.getElementById('edit-music-enabled').checked
+  };
+
+  await AdminService.updateMusic(currentWedding.id, musicData);
+  showToast('Đã lưu cài đặt nhạc nền thành công! 🎵');
+}
+
+// 11. BANK & QR FORM HANDLERS
+function populateBankForm() {
+  const gName = document.getElementById('edit-groom-bank-name');
+  const gAcc = document.getElementById('edit-groom-acc-name');
+  const gNum = document.getElementById('edit-groom-acc-num');
+  const gQr = document.getElementById('edit-groom-qr-url');
+
+  const bName = document.getElementById('edit-bride-bank-name');
+  const bAcc = document.getElementById('edit-bride-acc-name');
+  const bNum = document.getElementById('edit-bride-acc-num');
+  const bQr = document.getElementById('edit-bride-qr-url');
+
+  if (gName) gName.value = 'MB Bank';
+  if (gAcc) gAcc.value = 'VAN TIEN';
+  if (gNum) gNum.value = '1234 5678 9999';
+  if (gQr) gQr.value = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=MUNG-CUOI-CHU-RE-VAN-TIEN-MBBANK';
+
+  if (bName) bName.value = 'Vietcombank';
+  if (bAcc) bAcc.value = 'THU HA';
+  if (bNum) bNum.value = '9876 5432 1000';
+  if (bQr) bQr.value = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=MUNG-CUOI-CO-DAU-THU-HA-VIETCOMBANK';
+}
+
+async function handleUpdateBank(e) {
+  e.preventDefault();
+  if (!currentWedding) return;
+
+  const bankData = {
+    groom_bank: {
+      bank_name: document.getElementById('edit-groom-bank-name').value.trim(),
+      account_name: document.getElementById('edit-groom-acc-name').value.trim(),
+      account_number: document.getElementById('edit-groom-acc-num').value.trim()
+    },
+    groom_qr: document.getElementById('edit-groom-qr-url').value.trim(),
+    bride_bank: {
+      bank_name: document.getElementById('edit-bride-bank-name').value.trim(),
+      account_name: document.getElementById('edit-bride-acc-name').value.trim(),
+      account_number: document.getElementById('edit-bride-acc-num').value.trim()
+    },
+    bride_qr: document.getElementById('edit-bride-qr-url').value.trim()
+  };
+
+  await AdminService.updateBank(currentWedding.id, bankData);
+  showToast('Đã lưu thông tin chuyển khoản & QR mừng cưới! 💳');
+}
+

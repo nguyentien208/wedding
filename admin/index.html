@@ -346,17 +346,39 @@
       <!-- ==========================================
            TAB 8: NHẠC NỀN
          ========================================== -->
+      <!-- ==========================================
+           TAB 8: NHẠC NỀN
+         ========================================== -->
       <div id="tab-music" class="tab-pane" style="display: none;">
         <div class="admin-card">
           <div class="admin-card-header">
             <h3 class="admin-card-title">CÀI ĐẶT NHẠC NỀN THIỆP CƯỚI</h3>
           </div>
-          <div style="max-width: 500px;">
+          <form id="form-music-info" style="max-width: 600px;">
             <p style="font-size: 0.9rem; color: var(--admin-text-muted); margin-bottom: 20px;">
               Quản lý bài hát phát tự động khi khách mở thiệp cưới.
             </p>
-            <div id="music-status-box" style="margin-bottom: 20px; font-weight: 600;"></div>
-          </div>
+            
+            <div style="margin-bottom: 16px;">
+              <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Tên bài hát</label>
+              <input type="text" id="edit-music-title" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="Love Song" required>
+            </div>
+
+            <div style="margin-bottom: 16px;">
+              <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Đường dẫn File Nhạc (.mp3 URL / Relative Path)</label>
+              <input type="text" id="edit-music-url" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="./assets/music/love.mp3" required>
+            </div>
+
+            <div style="margin-bottom: 24px;">
+              <label style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; cursor: pointer;">
+                <input type="checkbox" id="edit-music-enabled" checked> Bật tự động phát nhạc
+              </label>
+            </div>
+
+            <button type="submit" class="btn-admin btn-admin-primary">
+              <i class="fas fa-save"></i> LƯU CÀI ĐẶT NHẠC 🎵
+            </button>
+          </form>
         </div>
       </div>
 
@@ -368,14 +390,126 @@
           <div class="admin-card-header">
             <h3 class="admin-card-title">THÔNG TIN CHUYỂN KHOẢN & QR MỪNG CƯỚI</h3>
           </div>
-          <p style="font-size: 0.9rem; color: var(--admin-text-muted);">
-            Thông tin mã QR Ngân hàng Nhà Trai và Nhà Gái.
-          </p>
+          <form id="form-bank-info">
+            <h4 style="color: var(--admin-primary); margin-bottom: 12px;">NHÀ TRAI (GROOM)</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Tên Ngân Hàng</label>
+                <input type="text" id="edit-groom-bank-name" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="MB Bank">
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Tên Chủ Tài Khoản</label>
+                <input type="text" id="edit-groom-acc-name" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="VAN TIEN">
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Số Tài Khoản</label>
+                <input type="text" id="edit-groom-acc-num" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="1234 5678 9999">
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Link Ảnh QR Code</label>
+                <input type="text" id="edit-groom-qr-url" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="https://api.qrserver.com/...">
+              </div>
+            </div>
+
+            <hr style="margin: 24px 0; border: none; border-top: 1px dashed var(--admin-border);">
+
+            <h4 style="color: var(--admin-primary); margin-bottom: 12px;">NHÀ GÁI (BRIDE)</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Tên Ngân Hàng</label>
+                <input type="text" id="edit-bride-bank-name" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="Vietcombank">
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Tên Chủ Tài Khoản</label>
+                <input type="text" id="edit-bride-acc-name" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="THU HA">
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Số Tài Khoản</label>
+                <input type="text" id="edit-bride-acc-num" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="9876 5432 1000">
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Link Ảnh QR Code</label>
+                <input type="text" id="edit-bride-qr-url" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="https://api.qrserver.com/...">
+              </div>
+            </div>
+
+            <button type="submit" class="btn-admin btn-admin-primary">
+              <i class="fas fa-save"></i> LƯU THÔNG TIN MỪNG CƯỚI 💳
+            </button>
+          </form>
         </div>
       </div>
 
     </div>
   </main>
+
+  <!-- MODAL THÊM LOVE STORY -->
+  <div id="modal-story" class="admin-modal-overlay">
+    <div class="admin-modal">
+      <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--admin-primary); margin-bottom: 16px;">THÊM MỐC THỜI GIAN</h3>
+      <form id="form-story-modal">
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Năm</label>
+          <input type="text" id="modal-story-year" class="btn-admin-secondary" style="width: 100%; padding: 8px; border-radius: 6px;" placeholder="2024" required>
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Tiêu đề</label>
+          <input type="text" id="modal-story-title" class="btn-admin-secondary" style="width: 100%; padding: 8px; border-radius: 6px;" placeholder="Lời Cầu Hôn Ngọt Ngào" required>
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Mô tả</label>
+          <textarea id="modal-story-desc" rows="3" class="btn-admin-secondary" style="width: 100%; padding: 8px; border-radius: 6px;" required></textarea>
+        </div>
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">URL Hình ảnh</label>
+          <input type="text" id="modal-story-img" class="btn-admin-secondary" style="width: 100%; padding: 8px; border-radius: 6px;" placeholder="https://images.unsplash.com/...">
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 12px;">
+          <button type="button" class="btn-admin btn-admin-secondary" onclick="closeStoryModal()">Hủy</button>
+          <button type="submit" class="btn-admin btn-admin-primary">Lưu Mốc Tình Yêu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL THÊM SỰ KIỆN -->
+  <div id="modal-event" class="admin-modal-overlay">
+    <div class="admin-modal">
+      <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--admin-primary); margin-bottom: 16px;">THÊM SỰ KIỆN LỄ CƯỚI</h3>
+      <form id="form-event-modal">
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Tên Sự Kiện</label>
+          <input type="text" id="modal-event-title" class="btn-admin-secondary" style="width: 100%; padding: 8px; border-radius: 6px;" placeholder="LỄ THÀNH HÔN" required>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+          <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Ngày</label>
+            <input type="text" id="modal-event-date" class="btn-admin-secondary" style="width: 100%; padding: 8px; border-radius: 6px;" placeholder="10.04.2027" required>
+          </div>
+          <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Giờ</label>
+            <input type="text" id="modal-event-time" class="btn-admin-secondary" style="width: 100%; padding: 8px; border-radius: 6px;" placeholder="18:00" required>
+          </div>
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Tên Địa Điểm</label>
+          <input type="text" id="modal-event-venue" class="btn-admin-secondary" style="width: 100%; padding: 8px; border-radius: 6px;" placeholder="Khách sạn MiWedi" required>
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Địa chỉ chi tiết</label>
+          <input type="text" id="modal-event-address" class="btn-admin-secondary" style="width: 100%; padding: 8px; border-radius: 6px;" placeholder="Khách sạn MiWedi">
+        </div>
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Mô tả ngắn</label>
+          <input type="text" id="modal-event-desc" class="btn-admin-secondary" style="width: 100%; padding: 8px; border-radius: 6px;" placeholder="Lễ thành hôn chính thức.">
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 12px;">
+          <button type="button" class="btn-admin btn-admin-secondary" onclick="closeEventModal()">Hủy</button>
+          <button type="submit" class="btn-admin btn-admin-primary">Lưu Sự Kiện</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- REUSABLE CONFIRMATION MODAL -->
   <div id="confirm-modal" class="admin-modal-overlay">

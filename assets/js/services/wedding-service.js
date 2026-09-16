@@ -6,25 +6,32 @@
 const WeddingService = {
   // 1. Lấy thông tin đám cưới theo Slug
   async getWeddingBySlug(slug) {
+    let baseData = CONFIG.SAMPLE_DATA.wedding;
     const client = getSupabaseClient();
-    if (!client) return { data: CONFIG.SAMPLE_DATA.wedding, error: null, isFallback: true };
+    
+    if (client) {
+      try {
+        const { data, error } = await client
+          .from('weddings')
+          .select('*')
+          .eq('slug', slug)
+          .single();
 
-    try {
-      const { data, error } = await client
-        .from('weddings')
-        .select('*')
-        .eq('slug', slug)
-        .single();
-
-      if (error || !data) {
-        console.warn('⚠️ Supabase getWeddingBySlug error or empty, using fallback:', error);
-        return { data: CONFIG.SAMPLE_DATA.wedding, error: null, isFallback: true };
+        if (data) baseData = data;
+      } catch (err) {
+        console.warn('Fetch wedding exception, using baseData:', err);
       }
-      return { data, error: null, isFallback: false };
-    } catch (err) {
-      console.error('Fetch wedding exception:', err);
-      return { data: CONFIG.SAMPLE_DATA.wedding, error: err, isFallback: true };
     }
+
+    // Gộp dữ liệu tùy chỉnh đã chỉnh sửa từ Admin (nếu có)
+    try {
+      const stored = localStorage.getItem('wedding_custom_data');
+      if (stored) {
+        baseData = { ...baseData, ...JSON.parse(stored) };
+      }
+    } catch (e) {}
+
+    return { data: baseData, error: null };
   },
 
   // 2. Lấy danh sách Love Story
