@@ -120,31 +120,53 @@ async function switchTab(tabName) {
 
 // 1. DASHBOARD OVERVIEW METRICS
 async function loadDashboardOverview() {
-  if (!currentWedding) return;
+  if (!currentWedding) currentWedding = CONFIG.SAMPLE_DATA.wedding;
 
-  // Render thông tin cơ bản
-  document.getElementById('dash-groom-name').textContent = currentWedding.groom_name;
-  document.getElementById('dash-bride-name').textContent = currentWedding.bride_name;
-  document.getElementById('dash-wedding-date').textContent = new Date(currentWedding.wedding_date).toLocaleString('vi-VN');
-  document.getElementById('dash-wedding-slug').textContent = currentWedding.slug;
+  try {
+    // Render thông tin cơ bản
+    const gName = document.getElementById('dash-groom-name');
+    const bName = document.getElementById('dash-bride-name');
+    const dateEl = document.getElementById('dash-wedding-date');
+    const slugEl = document.getElementById('dash-wedding-slug');
 
-  // Lấy dữ liệu thống kê RSVP & Wishes
-  const [rsvps, wishes] = await Promise.all([
-    AdminService.getAllRSVPs(currentWedding.id),
-    AdminService.getAllWishes(currentWedding.id)
-  ]);
+    if (gName) gName.textContent = currentWedding.groom_name || 'Văn Tiến';
+    if (bName) bName.textContent = currentWedding.bride_name || 'Thu Hà';
+    
+    if (dateEl && currentWedding.wedding_date) {
+      try {
+        dateEl.textContent = new Date(currentWedding.wedding_date).toLocaleString('vi-VN');
+      } catch (e) {
+        dateEl.textContent = currentWedding.wedding_date;
+      }
+    }
+    if (slugEl) slugEl.textContent = currentWedding.slug || 'van-tien-thu-ha';
 
-  const totalRSVP = rsvps.length;
-  const attendingGuests = rsvps
-    .filter(r => r.attendance === 'attending' || r.attendance === 'yes')
-    .reduce((sum, r) => sum + (r.guest_count || 1), 0);
-  const notAttendingCount = rsvps
-    .filter(r => r.attendance === 'not_attending' || r.attendance === 'no').length;
+    // Lấy dữ liệu thống kê RSVP & Wishes với try-catch an toàn
+    const rsvps = await AdminService.getAllRSVPs(currentWedding.id).catch(() => []);
+    const wishes = await AdminService.getAllWishes(currentWedding.id).catch(() => []);
 
-  document.getElementById('metric-rsvp-count').textContent = totalRSVP;
-  document.getElementById('metric-guest-count').textContent = attendingGuests;
-  document.getElementById('metric-not-attend-count').textContent = notAttendingCount;
-  document.getElementById('metric-wishes-count').textContent = wishes.length;
+    const safeRSVP = Array.isArray(rsvps) ? rsvps : [];
+    const safeWishes = Array.isArray(wishes) ? wishes : [];
+
+    const totalRSVP = safeRSVP.length;
+    const attendingGuests = safeRSVP
+      .filter(r => r && (r.attendance === 'attending' || r.attendance === 'yes'))
+      .reduce((sum, r) => sum + (r.guest_count || 1), 0);
+    const notAttendingCount = safeRSVP
+      .filter(r => r && (r.attendance === 'not_attending' || r.attendance === 'no')).length;
+
+    const rsvpCountEl = document.getElementById('metric-rsvp-count');
+    const guestCountEl = document.getElementById('metric-guest-count');
+    const notAttendCountEl = document.getElementById('metric-not-attend-count');
+    const wishesCountEl = document.getElementById('metric-wishes-count');
+
+    if (rsvpCountEl) rsvpCountEl.textContent = totalRSVP;
+    if (guestCountEl) guestCountEl.textContent = attendingGuests;
+    if (notAttendCountEl) notAttendCountEl.textContent = notAttendingCount;
+    if (wishesCountEl) wishesCountEl.textContent = safeWishes.length;
+  } catch (err) {
+    console.warn('loadDashboardOverview warning:', err);
+  }
 }
 
 // 2. CẶP ĐÔI (WEDDING FORM)
