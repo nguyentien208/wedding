@@ -161,59 +161,102 @@ function customizeQRCode() {
   }
 }
 
-function applyShapeMaskToCanvas(container, shape, displaySize, bgColor) {
-  const sourceCanvas = container.querySelector('canvas');
-  if (!sourceCanvas || shape === 'square') return;
+function drawHeartQRComposition(targetCanvas, qrCanvas, dotsColor, bgColor, size) {
+  targetCanvas.width = size;
+  targetCanvas.height = size;
+  const ctx = targetCanvas.getContext('2d');
 
-  const width = sourceCanvas.width;
-  const height = sourceCanvas.height;
+  // Clear background
+  ctx.fillStyle = bgColor;
+  ctx.fillRect(0, 0, size, size);
 
-  // Create temporary offscreen canvas for masked output
-  const maskedCanvas = document.createElement('canvas');
-  maskedCanvas.width = width;
-  maskedCanvas.height = height;
-  const ctx = maskedCanvas.getContext('2d');
-
+  // 1. Draw Heart Path Mask
+  ctx.save();
   ctx.beginPath();
+  const w = size;
+  const h = size;
 
-  if (shape === 'heart') {
-    // Draw smooth Heart path mask
-    const topCurveHeight = height * 0.3;
-    ctx.moveTo(width / 2, height * 0.88);
-    // Left curve
-    ctx.bezierCurveTo(
-      width * 0.1, height * 0.55,
-      width * 0.02, height * 0.22,
-      width * 0.28, height * 0.08
-    );
-    ctx.bezierCurveTo(
-      width * 0.42, height * 0.02,
-      width / 2, height * 0.2,
-      width / 2, height * 0.28
-    );
-    // Right curve
-    ctx.bezierCurveTo(
-      width / 2, height * 0.2,
-      width * 0.58, height * 0.02,
-      width * 0.72, height * 0.08
-    );
-    ctx.bezierCurveTo(
-      width * 0.98, height * 0.22,
-      width * 0.9, height * 0.55,
-      width / 2, height * 0.88
-    );
-    ctx.closePath();
-  } else if (shape === 'circle') {
-    ctx.arc(width / 2, height / 2, width / 2 - 4, 0, Math.PI * 2);
-    ctx.closePath();
+  // Perfect Heart Geometry
+  ctx.moveTo(w / 2, h * 0.92);
+  ctx.bezierCurveTo(w * 0.04, h * 0.58, w * -0.05, h * 0.22, w * 0.26, h * 0.06);
+  ctx.bezierCurveTo(w * 0.43, h * -0.02, w / 2, h * 0.16, w / 2, h * 0.24);
+  ctx.bezierCurveTo(w / 2, h * 0.16, w * 0.57, h * -0.02, w * 0.74, h * 0.06);
+  ctx.bezierCurveTo(w * 1.05, h * 0.22, w * 0.96, h * 0.58, w / 2, h * 0.92);
+  ctx.closePath();
+
+  // Clip everything inside the Heart
+  ctx.clip();
+
+  // Fill Background inside heart
+  ctx.fillStyle = bgColor;
+  ctx.fillRect(0, 0, size, size);
+
+  // 2. Fill background area with aesthetic decorative QR dots (Filler modules)
+  ctx.fillStyle = dotsColor;
+  const tileSize = Math.max(4, Math.round(size / 48));
+  for (let y = 0; y < size; y += tileSize) {
+    for (let x = 0; x < size; x += tileSize) {
+      // Random pseudo decorative pattern
+      const hash = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453;
+      const pseudoRandom = hash - Math.floor(hash);
+      if (pseudoRandom > 0.42) {
+        ctx.beginPath();
+        if (pseudoRandom > 0.75) {
+          ctx.arc(x + tileSize / 2, y + tileSize / 2, tileSize * 0.42, 0, Math.PI * 2);
+        } else {
+          ctx.rect(x + 0.5, y + 0.5, tileSize - 1, tileSize - 1);
+        }
+        ctx.fill();
+      }
+    }
   }
 
-  ctx.clip();
-  ctx.drawImage(sourceCanvas, 0, 0);
+  // 3. Draw real scannable QR Code rotated 45 degrees in the center
+  ctx.save();
+  ctx.translate(w / 2, h * 0.54);
+  ctx.rotate(Math.PI / 4); // Rotate 45 degrees (Diamond stance)
 
-  // Replace original canvas with masked canvas
-  container.innerHTML = '';
-  container.appendChild(maskedCanvas);
+  const qrDrawSize = Math.round(size * 0.52);
+
+  // Draw white padding / border behind central QR
+  ctx.fillStyle = bgColor;
+  const pad = Math.round(qrDrawSize * 0.06);
+  ctx.fillRect(-qrDrawSize / 2 - pad, -qrDrawSize / 2 - pad, qrDrawSize + pad * 2, qrDrawSize + pad * 2);
+
+  // Draw the real QR Code
+  ctx.drawImage(qrCanvas, -qrDrawSize / 2, -qrDrawSize / 2, qrDrawSize, qrDrawSize);
+
+  ctx.restore(); // Restore 45 deg rotation
+  ctx.restore(); // Restore Clip & Translate
+}
+
+function applyShapeMaskToCanvas(container, shape, displaySize, bgColor) {
+  const sourceCanvas = container.querySelector('canvas');
+  if (!sourceCanvas) return;
+
+  if (shape === 'square') return;
+
+  const dotsColor = document.getElementById('qr-color-dots')?.value || '#8B1E3F';
+  const width = sourceCanvas.width;
+
+  if (shape === 'heart') {
+    const artCanvas = document.createElement('canvas');
+    drawHeartQRComposition(artCanvas, sourceCanvas, dotsColor, bgColor, width);
+    container.innerHTML = '';
+    container.appendChild(artCanvas);
+  } else if (shape === 'circle') {
+    const maskedCanvas = document.createElement('canvas');
+    maskedCanvas.width = width;
+    maskedCanvas.height = width;
+    const ctx = maskedCanvas.getContext('2d');
+    ctx.beginPath();
+    ctx.arc(width / 2, width / 2, width / 2 - 4, 0, Math.PI * 2);
+    ctx.closePath();
+    ctx.clip();
+    ctx.drawImage(sourceCanvas, 0, 0);
+    container.innerHTML = '';
+    container.appendChild(maskedCanvas);
+  }
 }
 
 function downloadCardQRCode() {
@@ -239,7 +282,7 @@ function downloadCardQRCode() {
       height: exportSize,
       type: "canvas",
       data: fullShareUrl,
-      margin: Math.round(exportSize * 0.05),
+      margin: 10,
       qrOptions: {
         typeNumber: 0,
         mode: "Byte",
@@ -266,41 +309,35 @@ function downloadCardQRCode() {
 
     setTimeout(() => {
       const generatedCanvas = tempDiv.querySelector('canvas');
-      if (generatedCanvas && shapeFrame !== 'square') {
-        const maskedCanvas = document.createElement('canvas');
-        maskedCanvas.width = exportSize;
-        maskedCanvas.height = exportSize;
-        const ctx = maskedCanvas.getContext('2d');
-
-        ctx.beginPath();
+      if (generatedCanvas) {
+        const finalCanvas = document.createElement('canvas');
         if (shapeFrame === 'heart') {
-          const w = exportSize;
-          const h = exportSize;
-          ctx.moveTo(w / 2, h * 0.88);
-          ctx.bezierCurveTo(w * 0.1, h * 0.55, w * 0.02, h * 0.22, w * 0.28, h * 0.08);
-          ctx.bezierCurveTo(w * 0.42, h * 0.02, w / 2, h * 0.2, w / 2, h * 0.28);
-          ctx.bezierCurveTo(w / 2, h * 0.2, w * 0.58, h * 0.02, w * 0.72, h * 0.08);
-          ctx.bezierCurveTo(w * 0.98, h * 0.22, w * 0.9, h * 0.55, w / 2, h * 0.88);
-          ctx.closePath();
+          drawHeartQRComposition(finalCanvas, generatedCanvas, dotsColor, bgColor, exportSize);
         } else if (shapeFrame === 'circle') {
+          finalCanvas.width = exportSize;
+          finalCanvas.height = exportSize;
+          const ctx = finalCanvas.getContext('2d');
+          ctx.beginPath();
           ctx.arc(exportSize / 2, exportSize / 2, exportSize / 2 - 10, 0, Math.PI * 2);
           ctx.closePath();
+          ctx.clip();
+          ctx.drawImage(generatedCanvas, 0, 0);
+        } else {
+          finalCanvas.width = exportSize;
+          finalCanvas.height = exportSize;
+          const ctx = finalCanvas.getContext('2d');
+          ctx.drawImage(generatedCanvas, 0, 0);
         }
-
-        ctx.clip();
-        ctx.drawImage(generatedCanvas, 0, 0);
 
         // Trigger Download from Canvas DataURL
         const link = document.createElement('a');
         link.download = `QR_Trai_Tim_Thiep_Cuoi_${currentSlug}.png`;
-        link.href = maskedCanvas.toDataURL('image/png');
+        link.href = finalCanvas.toDataURL('image/png');
         link.click();
-      } else {
-        highResQR.download({ name: `QR_Thiep_Cuoi_${currentSlug}`, extension: "png" });
       }
 
       document.body.removeChild(tempDiv);
-      showToast(`🚀 Đã tải xuống mã QR trái tim HD (${exportSize}px)!`);
+      showToast(`🚀 Đã tải xuống mã QR trái tim nghệ thuật HD (${exportSize}px)!`);
     }, 150);
 
   } else {
