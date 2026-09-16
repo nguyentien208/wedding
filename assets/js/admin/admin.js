@@ -83,11 +83,47 @@ async function switchActiveWeddingCard(slug) {
     if (previewBtn) {
       previewBtn.href = `../index.html?wedding=${currentWedding.slug}`;
     }
+    updateShareLinkAndQR(currentWedding.slug);
   }
 
   const activeLink = document.querySelector('.admin-nav-link.active');
   const activeTab = activeLink ? activeLink.getAttribute('data-tab') : 'dashboard';
   await switchTab(activeTab);
+}
+
+function updateShareLinkAndQR(slug) {
+  let baseUrl = window.location.origin + window.location.pathname.replace(/\/admin\/(index\.html)?$/i, '');
+  if (!baseUrl.endsWith('/')) baseUrl += '/';
+  const fullShareUrl = `${baseUrl}index.html?wedding=${slug}`;
+
+  const urlInput = document.getElementById('share-card-url-input');
+  if (urlInput) urlInput.value = fullShareUrl;
+
+  const qrImg = document.getElementById('share-card-qr-img');
+  const qrDownload = document.getElementById('btn-download-card-qr');
+  
+  const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(fullShareUrl)}`;
+
+  if (qrImg) qrImg.src = qrApiUrl;
+  if (qrDownload) {
+    qrDownload.href = qrApiUrl;
+    qrDownload.download = `QR_Thiep_Cuoi_${slug}.png`;
+  }
+}
+
+function copyCardShareLink() {
+  const urlInput = document.getElementById('share-card-url-input');
+  if (!urlInput || !urlInput.value) return;
+
+  urlInput.select();
+  urlInput.setSelectionRange(0, 99999);
+  
+  navigator.clipboard.writeText(urlInput.value).then(() => {
+    showToast('📋 Đã sao chép link chia sẻ thiệp cưới thành công!');
+  }).catch(() => {
+    document.execCommand('copy');
+    showToast('📋 Đã sao chép link chia sẻ thiệp cưới!');
+  });
 }
 
 async function handleSelectWeddingCard(slug) {

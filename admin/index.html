@@ -117,6 +117,44 @@
            TAB 1: DASHBOARD OVERVIEW
          ========================================== -->
       <div id="tab-dashboard" class="tab-pane active">
+        <!-- SHARE LINK & QR CODE BANNER -->
+        <div class="admin-card" style="background: linear-gradient(135deg, #FAF8F5 0%, #FFFFFF 100%); border: 1px solid var(--admin-accent); margin-bottom: 24px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+            
+            <!-- LEFT SIDE: SHAREABLE LINK -->
+            <div style="flex: 1; min-width: 280px;">
+              <h3 style="color: var(--admin-primary); font-size: 1.1rem; font-weight: 700; margin-bottom: 6px;">
+                <i class="fas fa-share-alt" style="color: var(--admin-primary); margin-right: 6px;"></i> LINK CHIA SẺ THIỆP CƯỚI
+              </h3>
+              <p style="font-size: 0.85rem; color: var(--admin-text-muted); margin-bottom: 12px;">
+                Gửi đường dẫn này cho bạn bè & người thân để mở thiệp online:
+              </p>
+              
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <input type="text" id="share-card-url-input" class="btn-admin-secondary" style="flex: 1; padding: 10px; font-weight: 600; color: #1E293B; background: #FFFFFF;" readonly>
+                <button class="btn-admin btn-admin-primary" onclick="copyCardShareLink()">
+                  <i class="fas fa-copy"></i> SAO CHÉP LINK
+                </button>
+              </div>
+            </div>
+
+            <!-- RIGHT SIDE: CARD QR CODE GENERATOR -->
+            <div style="display: flex; align-items: center; gap: 16px; border-left: 1px dashed var(--admin-border); padding-left: 20px;">
+              <img id="share-card-qr-img" src="" alt="Wedding Card QR Code" style="width: 105px; height: 105px; border-radius: 8px; border: 1px solid var(--admin-border); padding: 4px; background: #FFFFFF;">
+              
+              <div>
+                <div style="font-weight: 700; font-size: 0.9rem; color: var(--admin-primary); margin-bottom: 4px;">MÃ QR THIỆP CƯỚI</div>
+                <div style="font-size: 0.8rem; color: var(--admin-text-muted); margin-bottom: 10px;">Quét mã QR để mở thiệp trên điện thoại</div>
+                
+                <a id="btn-download-card-qr" download="QR_Thiep_Cuoi.png" target="_blank" class="btn-admin btn-admin-secondary btn-sm">
+                  <i class="fas fa-download"></i> TẢI MÃ QR
+                </a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
         <div class="admin-grid-4">
           <div class="metric-card">
             <div>
