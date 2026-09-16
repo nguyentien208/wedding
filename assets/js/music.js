@@ -26,29 +26,47 @@ class WeddingMusic {
       });
     }
 
-    // Tự động bật nhạc khi người dùng bắt đầu cuộn trang (scroll) hoặc chạm màn hình
-    const autoPlayOnScroll = () => {
-      if (!this.hasStarted && !this.isPlaying) {
-        this.play();
-      }
-      window.removeEventListener('scroll', autoPlayOnScroll);
-      window.removeEventListener('touchmove', autoPlayOnScroll);
-      window.removeEventListener('wheel', autoPlayOnScroll);
+    const events = ['click', 'touchstart', 'pointerdown', 'touchmove', 'scroll', 'keydown', 'wheel'];
+    
+    const removeAutoplayListeners = () => {
+      events.forEach(evt => {
+        window.removeEventListener(evt, tryAutoPlay);
+        document.removeEventListener(evt, tryAutoPlay);
+      });
     };
 
-    window.addEventListener('scroll', autoPlayOnScroll, { passive: true });
-    window.addEventListener('touchmove', autoPlayOnScroll, { passive: true });
-    window.addEventListener('wheel', autoPlayOnScroll, { passive: true });
-    window.addEventListener('click', autoPlayOnScroll, { passive: true, once: true });
+    const tryAutoPlay = () => {
+      if (this.isPlaying) {
+        removeAutoplayListeners();
+        return;
+      }
+
+      this.audio.play().then(() => {
+        this.isPlaying = true;
+        this.hasStarted = true;
+        this.updateUI();
+        removeAutoplayListeners();
+      }).catch(err => {
+        // Keep listeners active until genuine user activation occurs
+      });
+    };
+
+    events.forEach(evt => {
+      window.addEventListener(evt, tryAutoPlay, { passive: true });
+      document.addEventListener(evt, tryAutoPlay, { passive: true });
+    });
+
+    // Thử phát ngay khi load trang
+    tryAutoPlay();
   }
 
   play() {
-    this.hasStarted = true;
     this.audio.play().then(() => {
       this.isPlaying = true;
+      this.hasStarted = true;
       this.updateUI();
     }).catch(err => {
-      console.log('Autoplay waiting for user gesture:', err);
+      console.log('Audio play failed or blocked:', err);
       this.isPlaying = false;
       this.updateUI();
     });
