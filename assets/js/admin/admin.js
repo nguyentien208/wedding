@@ -173,15 +173,29 @@ async function loadDashboardOverview() {
 function populateWeddingForm() {
   if (!currentWedding) currentWedding = CONFIG.SAMPLE_DATA.wedding;
   
-  const gName = document.getElementById('edit-groom-name');
-  const bName = document.getElementById('edit-bride-name');
+  const setVal = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.value = val || '';
+  };
+
+  setVal('edit-groom-name', currentWedding.groom_name || 'Văn Tiến');
+  setVal('edit-bride-name', currentWedding.bride_name || 'Thu Hà');
+  setVal('edit-groom-image', currentWedding.groom_image || './assets/img/men.webp');
+  setVal('edit-bride-image', currentWedding.bride_image || './assets/img/girl.webp');
+  setVal('edit-hero-image', currentWedding.hero_image || './assets/img/banner.webp');
+
+  setVal('edit-groom-father', currentWedding.groom_father || 'ÔNG PHẠM VĂN LONG');
+  setVal('edit-groom-mother', currentWedding.groom_mother || 'BÀ LÊ THỊ HỒNG');
+  setVal('edit-bride-father', currentWedding.bride_father || 'ÔNG VŨ ĐÌNH NAM');
+  setVal('edit-bride-mother', currentWedding.bride_mother || 'BÀ TRẦN THÚY HẰNG');
+
+  setVal('edit-lunar-date', currentWedding.lunar_date || 'Tức ngày 25 tháng 02 năm Đinh Mùi');
+  setVal('edit-venue-name', currentWedding.venue_name || 'Khách sạn MiWedi');
+  setVal('edit-venue-address', currentWedding.venue_address || 'Khách sạn MiWedi');
+  setVal('edit-video-url', currentWedding.video_url || 'https://www.youtube.com/embed/dQw4w9WgXcQ');
+  setVal('edit-intro-text', currentWedding.intro_text || currentWedding.description || 'Chung tay dựng một mái nhà, / Sơn khuya có bạn, đường xa có cùng.');
+
   const dateEl = document.getElementById('edit-wedding-date');
-  const videoEl = document.getElementById('edit-video-url');
-  const introEl = document.getElementById('edit-intro-text');
-
-  if (gName) gName.value = currentWedding.groom_name || 'Văn Tiến';
-  if (bName) bName.value = currentWedding.bride_name || 'Thu Hà';
-
   if (dateEl && currentWedding.wedding_date) {
     try {
       const d = new Date(currentWedding.wedding_date);
@@ -189,13 +203,8 @@ function populateWeddingForm() {
         d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
         dateEl.value = d.toISOString().slice(0, 16);
       }
-    } catch (e) {
-      console.warn('Date format warning:', e);
-    }
+    } catch (e) {}
   }
-
-  if (videoEl) videoEl.value = currentWedding.video_url || 'https://www.youtube.com/embed/dQw4w9WgXcQ';
-  if (introEl) introEl.value = currentWedding.intro_text || currentWedding.description || 'Chung tay dựng một mái nhà, / Sơn khuya có bạn, đường xa có cùng.';
 }
 
 async function handleUpdateWedding(e) {
@@ -209,7 +218,12 @@ async function handleUpdateWedding(e) {
   }
 
   try {
-    const rawDate = document.getElementById('edit-wedding-date').value;
+    const getVal = (id) => {
+      const el = document.getElementById(id);
+      return el ? el.value.trim() : '';
+    };
+
+    const rawDate = getVal('edit-wedding-date');
     let weddingDateIso = currentWedding.wedding_date || new Date().toISOString();
     
     if (rawDate) {
@@ -220,14 +234,23 @@ async function handleUpdateWedding(e) {
     }
 
     const updatedData = {
-      groom_name: document.getElementById('edit-groom-name').value.trim() || 'Văn Tiến',
-      bride_name: document.getElementById('edit-bride-name').value.trim() || 'Thu Hà',
+      groom_name: getVal('edit-groom-name') || 'Văn Tiến',
+      bride_name: getVal('edit-bride-name') || 'Thu Hà',
+      groom_image: getVal('edit-groom-image') || './assets/img/men.webp',
+      bride_image: getVal('edit-bride-image') || './assets/img/girl.webp',
+      hero_image: getVal('edit-hero-image') || './assets/img/banner.webp',
+      groom_father: getVal('edit-groom-father') || 'ÔNG PHẠM VĂN LONG',
+      groom_mother: getVal('edit-groom-mother') || 'BÀ LÊ THỊ HỒNG',
+      bride_father: getVal('edit-bride-father') || 'ÔNG VŨ ĐÌNH NAM',
+      bride_mother: getVal('edit-bride-mother') || 'BÀ TRẦN THÚY HẰNG',
       wedding_date: weddingDateIso,
-      video_url: document.getElementById('edit-video-url').value.trim(),
-      intro_text: document.getElementById('edit-intro-text').value.trim(),
-      description: document.getElementById('edit-intro-text').value.trim(),
-      hero_title: 'WE ARE GETTING MARRIED',
-      hero_image: currentWedding.hero_image || './assets/img/banner.webp'
+      lunar_date: getVal('edit-lunar-date') || 'Tức ngày 25 tháng 02 năm Đinh Mùi',
+      venue_name: getVal('edit-venue-name') || 'Khách sạn MiWedi',
+      venue_address: getVal('edit-venue-address') || 'Khách sạn MiWedi',
+      video_url: getVal('edit-video-url'),
+      intro_text: getVal('edit-intro-text'),
+      description: getVal('edit-intro-text'),
+      hero_title: 'WE ARE GETTING MARRIED'
     };
 
     const res = await AdminService.updateWeddingInfo(currentWedding.id, updatedData);

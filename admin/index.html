@@ -165,34 +165,84 @@
             <h3 class="admin-card-title">CHỈNH SỬA THÔNG TIN CẶP ĐÔI</h3>
           </div>
           <form id="form-wedding-info">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+            <h4 style="color: var(--admin-primary); margin-bottom: 12px; font-size: 1rem;">1. THÔNG TIN CẶP ĐÔI & HÌNH ẢNH</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
               <div>
                 <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Tên Chú Rể</label>
-                <input type="text" id="edit-groom-name" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" required>
+                <input type="text" id="edit-groom-name" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="Văn Tiến" required>
               </div>
               <div>
                 <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Tên Cô Dâu</label>
-                <input type="text" id="edit-bride-name" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" required>
+                <input type="text" id="edit-bride-name" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="Thu Hà" required>
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">URL Ảnh Chú Rể</label>
+                <input type="text" id="edit-groom-image" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="./assets/img/men.webp">
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">URL Ảnh Cô Dâu</label>
+                <input type="text" id="edit-bride-image" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="./assets/img/girl.webp">
+              </div>
+              <div style="grid-column: 1/-1;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">URL Ảnh Hero Banner Trang Đầu</label>
+                <input type="text" id="edit-hero-image" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="./assets/img/banner.webp">
               </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+            <hr style="margin: 20px 0; border: none; border-top: 1px dashed var(--admin-border);">
+
+            <h4 style="color: var(--admin-primary); margin-bottom: 12px; font-size: 1rem;">2. THÔNG TIN BỐ MẸ HAI HỌ</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
               <div>
-                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Ngày Cưới (ISO format / Datetime)</label>
-                <input type="datetime-local" id="edit-wedding-date" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" required>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Bố Chú Rể</label>
+                <input type="text" id="edit-groom-father" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="ÔNG PHẠM VĂN LONG">
               </div>
               <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Mẹ Chú Rể</label>
+                <input type="text" id="edit-groom-mother" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="BÀ LÊ THỊ HỒNG">
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Bố Cô Dâu</label>
+                <input type="text" id="edit-bride-father" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="ÔNG VŨ ĐÌNH NAM">
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Mẹ Cô Dâu</label>
+                <input type="text" id="edit-bride-mother" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="BÀ TRẦN THÚY HẰNG">
+              </div>
+            </div>
+
+            <hr style="margin: 20px 0; border: none; border-top: 1px dashed var(--admin-border);">
+
+            <h4 style="color: var(--admin-primary); margin-bottom: 12px; font-size: 1rem;">3. THỜI GIAN & ĐỊA ĐIỂM TIỆC CƯỚI</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Ngày Giờ Cưới (Dương Lịch)</label>
+                <input type="datetime-local" id="edit-wedding-date" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;">
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Ngày Âm Lịch</label>
+                <input type="text" id="edit-lunar-date" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="Tức ngày 25 tháng 02 năm Đinh Mùi">
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Tên Địa Điểm Tiệc Cưới</label>
+                <input type="text" id="edit-venue-name" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="Khách sạn MiWedi">
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Địa Chỉ Chi Tiết</label>
+                <input type="text" id="edit-venue-address" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="Khách sạn MiWedi">
+              </div>
+              <div style="grid-column: 1/-1;">
                 <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Link YouTube Video Kỷ Niệm</label>
-                <input type="url" id="edit-video-url" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="https://www.youtube.com/embed/...">
+                <input type="text" id="edit-video-url" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="https://www.youtube.com/embed/dQw4w9WgXcQ">
               </div>
             </div>
 
-            <div style="margin-bottom: 20px;">
+            <div style="margin-bottom: 24px;">
               <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Lời Ngỏ (Intro Text)</label>
-              <textarea id="edit-intro-text" rows="4" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" required></textarea>
+              <textarea id="edit-intro-text" rows="3" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="Chung tay dựng một mái nhà..."></textarea>
             </div>
 
-            <button type="submit" class="btn-admin btn-admin-primary">
+            <button type="submit" class="btn-admin btn-admin-primary" style="padding: 12px 24px;">
               <i class="fas fa-save"></i> LƯU THAY ĐỔI ❤️
             </button>
           </form>

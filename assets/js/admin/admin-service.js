@@ -48,14 +48,21 @@ const AdminService = {
           .update({
             groom_name: formData.groom_name,
             bride_name: formData.bride_name,
-            groom_title: formData.groom_title || 'Chú Rể',
-            bride_title: formData.bride_title || 'Cô Dâu',
+            groom_image: formData.groom_image,
+            bride_image: formData.bride_image,
+            hero_image: formData.hero_image,
+            groom_father: formData.groom_father,
+            groom_mother: formData.groom_mother,
+            bride_father: formData.bride_father,
+            bride_mother: formData.bride_mother,
             wedding_date: formData.wedding_date,
+            lunar_date: formData.lunar_date,
+            venue_name: formData.venue_name,
+            venue_address: formData.venue_address,
             hero_title: formData.hero_title,
             intro_text: formData.intro_text,
             description: formData.description,
             video_url: formData.video_url,
-            hero_image: formData.hero_image,
             updated_at: new Date().toISOString()
           })
           .eq('id', id);

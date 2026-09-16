@@ -115,6 +115,10 @@ function showPageLoading(isLoading) {
 function renderWeddingInfo(w) {
   if (!w) return;
 
+  // Header script overlay
+  const headerGroom = document.querySelector('.header-script-line2');
+  if (headerGroom) headerGroom.textContent = w.groom_name;
+
   // Script Names
   const scriptGroom = document.getElementById('script-groom-name');
   const scriptBride = document.getElementById('script-bride-name');
@@ -126,18 +130,20 @@ function renderWeddingInfo(w) {
   const groomMother = document.getElementById('groom-mother');
   const brideFather = document.getElementById('bride-father');
   const brideMother = document.getElementById('bride-mother');
-  if (groomFather) groomFather.textContent = w.groom_father || 'PHẠM VĂN LONG';
-  if (groomMother) groomMother.textContent = w.groom_mother || 'LÊ THỊ HỒNG';
+  if (groomFather) groomFather.textContent = w.groom_father || 'ÔNG PHẠM VĂN LONG';
+  if (groomMother) groomMother.textContent = w.groom_mother || 'BÀ LÊ THỊ HỒNG';
   if (brideFather) brideFather.textContent = w.bride_father || 'VŨ ĐÌNH NAM';
   if (brideMother) brideMother.textContent = w.bride_mother || 'TRẦN THÚY HẰNG';
 
-  // Venue Names
+  // Venue Names & Address Subtitle
   const venueGroom = document.getElementById('venue-groom');
   const venueBride = document.getElementById('venue-bride');
   const addressVenue = document.getElementById('address-venue');
+  const addressSub = document.getElementById('address-venue-sub');
   if (venueGroom) venueGroom.textContent = w.venue_name || 'Khách sạn MiWedi';
   if (venueBride) venueBride.textContent = w.venue_name || 'Khách sạn MiWedi';
   if (addressVenue) addressVenue.textContent = w.venue_name || 'KHÁCH SẠN MIWEDI';
+  if (addressSub) addressSub.textContent = w.venue_address || w.venue_name || 'Khách sạn MiWedi';
 
   // Main Banner Image
   const heroImg = document.querySelector('.hero-photo-img');
@@ -154,9 +160,12 @@ function renderWeddingInfo(w) {
   if (groomPortImg && w.groom_image) groomPortImg.src = w.groom_image;
   if (bridePortImg && w.bride_image) bridePortImg.src = w.bride_image;
 
-  // Lunar Date & Quote
+  // Lunar Date & Intro Text / Quote
   const lunarEl = document.getElementById('lunar-date-text');
   if (lunarEl) lunarEl.textContent = w.lunar_date || 'Tức ngày 25 tháng 02 năm Đinh Mùi';
+
+  const introEl = document.querySelector('.calendar-quote-script');
+  if (introEl && w.intro_text) introEl.textContent = w.intro_text;
 }
 
 // Render Calendar Table for April 2027 (Day 10 Highlighted)
