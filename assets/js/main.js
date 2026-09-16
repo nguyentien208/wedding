@@ -42,10 +42,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderEvents(eventsRes.data);
     renderGallery(galleryRes.data);
     
-    if (musicRes.data && musicRes.data.audio_url) {
+    if (musicRes.data && musicRes.data.audio_url && !musicRes.data.audio_url.includes('SoundHelix')) {
       initMusic(musicRes.data.audio_url);
     } else {
-      hideMusicControl();
+      initMusic('./assets/music/love.mp3');
     }
 
     renderVideo(activeWeddingData.video_url);

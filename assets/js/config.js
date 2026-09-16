@@ -130,9 +130,8 @@ const CONFIG = {
       },
     ],
     music: {
-      title: "Beautiful In White - Shane Filan",
-      audio_url:
-        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+      title: "Love Song",
+      audio_url: "./assets/music/love.mp3",
     },
     wishes: [
       {

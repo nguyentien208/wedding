@@ -49,7 +49,7 @@ INSERT INTO gallery (wedding_id, image_url, caption, sort_order) VALUES
 
 -- 5. CHÈN NHẠC NỀN (MUSIC)
 INSERT INTO music (wedding_id, title, audio_url, enabled) VALUES
-('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'Beautiful In White - Shane Filan', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', true);
+('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'Love Song', './assets/music/love.mp3', true);
 
 -- 6. CHÈN THÔNG TIN NGÂN HÀNG (BANK ACCOUNTS & QR)
 INSERT INTO bank_accounts (wedding_id, type, bank_name, account_name, account_number, qr_image_url, enabled, sort_order) VALUES
