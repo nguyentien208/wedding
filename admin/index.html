@@ -12,6 +12,9 @@
   
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- QRCode Styling Library -->
+  <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
 
   <!-- Admin Custom CSS -->
   <link rel="stylesheet" href="../assets/css/admin.css">
@@ -119,36 +122,90 @@
       <div id="tab-dashboard" class="tab-pane active">
         <!-- SHARE LINK & QR CODE BANNER -->
         <div class="admin-card" style="background: linear-gradient(135deg, #FAF8F5 0%, #FFFFFF 100%); border: 1px solid var(--admin-accent); margin-bottom: 24px;">
-          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+          <div style="display: flex; flex-direction: column; gap: 20px;">
             
-            <!-- LEFT SIDE: SHAREABLE LINK -->
-            <div style="flex: 1; min-width: 280px;">
-              <h3 style="color: var(--admin-primary); font-size: 1.1rem; font-weight: 700; margin-bottom: 6px;">
-                <i class="fas fa-share-alt" style="color: var(--admin-primary); margin-right: 6px;"></i> LINK CHIA SẺ THIỆP CƯỚI
-              </h3>
-              <p style="font-size: 0.85rem; color: var(--admin-text-muted); margin-bottom: 12px;">
-                Gửi đường dẫn này cho bạn bè & người thân để mở thiệp online:
-              </p>
-              
-              <div style="display: flex; gap: 8px; align-items: center;">
-                <input type="text" id="share-card-url-input" class="btn-admin-secondary" style="flex: 1; padding: 10px; font-weight: 600; color: #1E293B; background: #FFFFFF;" readonly>
-                <button class="btn-admin btn-admin-primary" onclick="copyCardShareLink()">
-                  <i class="fas fa-copy"></i> SAO CHÉP LINK
-                </button>
+            <div style="display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+              <!-- LEFT SIDE: SHAREABLE LINK -->
+              <div style="flex: 1; min-width: 280px;">
+                <h3 style="color: var(--admin-primary); font-size: 1.1rem; font-weight: 700; margin-bottom: 6px;">
+                  <i class="fas fa-share-alt" style="color: var(--admin-primary); margin-right: 6px;"></i> LINK CHIA SẺ THIỆP CƯỚI
+                </h3>
+                <p style="font-size: 0.85rem; color: var(--admin-text-muted); margin-bottom: 12px;">
+                  Gửi đường dẫn này cho bạn bè & người thân để mở thiệp online:
+                </p>
+                
+                <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 16px;">
+                  <input type="text" id="share-card-url-input" class="btn-admin-secondary" style="flex: 1; padding: 10px; font-weight: 600; color: #1E293B; background: #FFFFFF;" readonly>
+                  <button class="btn-admin btn-admin-primary" onclick="copyCardShareLink()">
+                    <i class="fas fa-copy"></i> SAO CHÉP LINK
+                  </button>
+                </div>
+              </div>
+
+              <!-- RIGHT SIDE: CARD QR CODE DISPLAY & CLICK TO DOWNLOAD -->
+              <div style="display: flex; align-items: center; gap: 16px; border-left: 1px dashed var(--admin-border); padding-left: 20px; min-width: 300px;">
+                <div style="position: relative; cursor: pointer; title: 'Bấm vào để tải mã QR';" onclick="downloadCardQRCode()" class="qr-preview-wrapper">
+                  <div id="share-card-qr-canvas" style="width: 120px; height: 120px; border-radius: 12px; border: 2px solid var(--admin-accent); padding: 6px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: transform 0.2s ease;"></div>
+                  <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.4); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #FFF; opacity: 0; transition: opacity 0.2s ease; font-size: 0.75rem; font-weight: 700; text-align: center; padding: 4px;" class="qr-hover-overlay">
+                    <i class="fas fa-download" style="font-size: 1.2rem; margin-bottom: 4px;"></i> TẢI QR VỀ
+                  </div>
+                </div>
+                
+                <div>
+                  <div style="font-weight: 700; font-size: 0.95rem; color: var(--admin-primary); margin-bottom: 4px;">MÃ QR THIỆP CƯỚI</div>
+                  <div style="font-size: 0.8rem; color: var(--admin-text-muted); margin-bottom: 10px;">Bấm trực tiếp vào ảnh Mã QR hoặc nút dưới để TẢI VỀ:</div>
+                  
+                  <button onclick="downloadCardQRCode()" class="btn-admin btn-admin-primary btn-sm">
+                    <i class="fas fa-download"></i> TẢI MÃ QR VỀ MÁY
+                  </button>
+                </div>
               </div>
             </div>
 
-            <!-- RIGHT SIDE: CARD QR CODE GENERATOR -->
-            <div style="display: flex; align-items: center; gap: 16px; border-left: 1px dashed var(--admin-border); padding-left: 20px;">
-              <img id="share-card-qr-img" src="" alt="Wedding Card QR Code" style="width: 105px; height: 105px; border-radius: 8px; border: 1px solid var(--admin-border); padding: 4px; background: #FFFFFF;">
-              
-              <div>
-                <div style="font-weight: 700; font-size: 0.9rem; color: var(--admin-primary); margin-bottom: 4px;">MÃ QR THIỆP CƯỚI</div>
-                <div style="font-size: 0.8rem; color: var(--admin-text-muted); margin-bottom: 10px;">Quét mã QR để mở thiệp trên điện thoại</div>
+            <!-- QR CUSTOMIZATION CONTROLS -->
+            <div style="border-top: 1px dashed var(--admin-border); padding-top: 16px;">
+              <div style="font-size: 0.85rem; font-weight: 700; color: var(--admin-primary); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+                <i class="fas fa-palette" style="color: var(--admin-accent);"></i> TUỲ CHỈNH KIỂU DÁNG & MÀU SẮC MÃ QR:
+              </div>
+              <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; background: #FFF; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--admin-border);">
                 
-                <a id="btn-download-card-qr" download="QR_Thiep_Cuoi.png" target="_blank" class="btn-admin btn-admin-secondary btn-sm">
-                  <i class="fas fa-download"></i> TẢI MÃ QR
-                </a>
+                <!-- Color Control -->
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <label for="qr-color-dots" style="font-size: 0.8rem; font-weight: 600; color: #475569;">Màu điểm:</label>
+                  <input type="color" id="qr-color-dots" value="#8B1E3F" style="width: 32px; height: 32px; border: none; border-radius: 6px; cursor: pointer;" onchange="customizeQRCode()">
+                </div>
+
+                <!-- Background Color Control -->
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <label for="qr-color-bg" style="font-size: 0.8rem; font-weight: 600; color: #475569;">Màu nền:</label>
+                  <input type="color" id="qr-color-bg" value="#FFFFFF" style="width: 32px; height: 32px; border: none; border-radius: 6px; cursor: pointer;" onchange="customizeQRCode()">
+                </div>
+
+                <!-- Dots Style -->
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <label for="qr-style-dots" style="font-size: 0.8rem; font-weight: 600; color: #475569;">Hình dạng mã:</label>
+                  <select id="qr-style-dots" style="padding: 4px 8px; font-size: 0.8rem; border-radius: 6px; border: 1px solid var(--admin-border); background: #FAF8F5; cursor: pointer;" onchange="customizeQRCode()">
+                    <option value="rounded" selected>Bo tròn góc (Rounded)</option>
+                    <option value="dots">Dạng Chấm Tròn (Dots)</option>
+                    <option value="classy">Sang Trọng (Classy)</option>
+                    <option value="square">Vuông Truyền Thống (Square)</option>
+                    <option value="extra-rounded">Siêu Tròn (Extra-rounded)</option>
+                  </select>
+                </div>
+
+                <!-- Corner Eyes Style -->
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <label for="qr-style-corners" style="font-size: 0.8rem; font-weight: 600; color: #475569;">Khung góc:</label>
+                  <select id="qr-style-corners" style="padding: 4px 8px; font-size: 0.8rem; border-radius: 6px; border: 1px solid var(--admin-border); background: #FAF8F5; cursor: pointer;" onchange="customizeQRCode()">
+                    <option value="dot" selected>Mắt Tròn (Dot)</option>
+                    <option value="square">Mắt Vuông (Square)</option>
+                  </select>
+                </div>
+
+                <div style="margin-left: auto; font-size: 0.75rem; color: var(--admin-text-muted);">
+                  <i class="fas fa-sparkles text-wine"></i> Mã QR cập nhật tức thì!
+                </div>
+
               </div>
             </div>
 

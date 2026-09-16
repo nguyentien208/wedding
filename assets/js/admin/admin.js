@@ -91,6 +91,8 @@ async function switchActiveWeddingCard(slug) {
   await switchTab(activeTab);
 }
 
+let qrCodeStylingInstance = null;
+
 function updateShareLinkAndQR(slug) {
   let baseUrl = window.location.origin + window.location.pathname.replace(/\/admin\/(index\.html)?$/i, '');
   if (!baseUrl.endsWith('/')) baseUrl += '/';
@@ -99,15 +101,85 @@ function updateShareLinkAndQR(slug) {
   const urlInput = document.getElementById('share-card-url-input');
   if (urlInput) urlInput.value = fullShareUrl;
 
-  const qrImg = document.getElementById('share-card-qr-img');
-  const qrDownload = document.getElementById('btn-download-card-qr');
-  
-  const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(fullShareUrl)}`;
+  customizeQRCode();
+}
 
-  if (qrImg) qrImg.src = qrApiUrl;
-  if (qrDownload) {
-    qrDownload.href = qrApiUrl;
-    qrDownload.download = `QR_Thiep_Cuoi_${slug}.png`;
+function customizeQRCode() {
+  const urlInput = document.getElementById('share-card-url-input');
+  const fullShareUrl = urlInput ? urlInput.value : window.location.href;
+
+  const dotsColor = document.getElementById('qr-color-dots')?.value || '#8B1E3F';
+  const bgColor = document.getElementById('qr-color-bg')?.value || '#FFFFFF';
+  const dotsStyle = document.getElementById('qr-style-dots')?.value || 'rounded';
+  const cornersStyle = document.getElementById('qr-style-corners')?.value || 'dot';
+
+  const container = document.getElementById('share-card-qr-canvas');
+  if (!container) return;
+
+  container.innerHTML = '';
+
+  if (typeof QRCodeStyling !== 'undefined') {
+    qrCodeStylingInstance = new QRCodeStyling({
+      width: 300,
+      height: 300,
+      type: "svg",
+      data: fullShareUrl,
+      margin: 10,
+      qrOptions: {
+        typeNumber: 0,
+        mode: "Byte",
+        errorCorrectionLevel: "Q"
+      },
+      imageOptions: {
+        hideBackgroundDots: true,
+        imageSize: 0.4,
+        margin: 5
+      },
+      dotsOptions: {
+        color: dotsColor,
+        type: dotsStyle
+      },
+      backgroundOptions: {
+        color: bgColor,
+      },
+      cornersSquareOptions: {
+        color: dotsColor,
+        type: cornersStyle === 'dot' ? 'extra-rounded' : 'square'
+      },
+      cornersDotOptions: {
+        color: dotsColor,
+        type: cornersStyle
+      }
+    });
+
+    qrCodeStylingInstance.append(container);
+  } else {
+    // Fallback if library didn't load
+    const fallbackUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(fullShareUrl)}`;
+    container.innerHTML = `<img src="${fallbackUrl}" style="width:100%; height:100%; border-radius:8px;">`;
+  }
+}
+
+function downloadCardQRCode() {
+  const currentSlug = currentWedding ? currentWedding.slug : 'wedding';
+  const filename = `QR_Thiep_Cuoi_${currentSlug}.png`;
+
+  if (qrCodeStylingInstance) {
+    qrCodeStylingInstance.download({ name: `QR_Thiep_Cuoi_${currentSlug}`, extension: "png" });
+    showToast('🚀 Đã bắt đầu tải xuống mã QR thiệp cưới!');
+  } else {
+    const urlInput = document.getElementById('share-card-url-input');
+    if (!urlInput || !urlInput.value) return;
+    const fallbackUrl = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(urlInput.value)}`;
+    
+    const a = document.createElement('a');
+    a.href = fallbackUrl;
+    a.download = filename;
+    a.target = '_blank';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    showToast('🚀 Đã tải xuống mã QR thiệp cưới!');
   }
 }
 

@@ -350,3 +350,12 @@ body.admin-body {
     display: block;
   }
 }
+
+/* QR Code Preview Hover effect */
+.qr-preview-wrapper:hover #share-card-qr-canvas {
+  transform: scale(1.05);
+}
+.qr-preview-wrapper:hover .qr-hover-overlay {
+  opacity: 1 !important;
+}
+
