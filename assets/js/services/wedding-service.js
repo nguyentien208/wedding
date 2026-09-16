@@ -11,7 +11,7 @@ const WeddingService = {
     
     if (client) {
       try {
-        const { data, error } = await client
+        const { data } = await client
           .from('weddings')
           .select('*')
           .eq('slug', slug)
@@ -23,11 +23,22 @@ const WeddingService = {
       }
     }
 
-    // Gộp dữ liệu tùy chỉnh đã chỉnh sửa từ Admin (nếu có)
+    // Kiểm tra dữ liệu thiệp cưới theo slug trong LocalStorage
     try {
-      const stored = localStorage.getItem('wedding_custom_data');
-      if (stored) {
-        baseData = { ...baseData, ...JSON.parse(stored) };
+      const storedBySlug = localStorage.getItem('wedding_data_' + slug);
+      if (storedBySlug) {
+        baseData = { ...baseData, ...JSON.parse(storedBySlug) };
+      } else {
+        const list = JSON.parse(localStorage.getItem('wedding_cards_list') || '[]');
+        const foundInList = list.find(c => c.slug === slug);
+        if (foundInList) {
+          baseData = { ...baseData, ...foundInList };
+        } else {
+          const generalCustom = localStorage.getItem('wedding_custom_data');
+          if (generalCustom && (slug === CONFIG.DEFAULT_SLUG || slug === 'van-tien-thu-ha')) {
+            baseData = { ...baseData, ...JSON.parse(generalCustom) };
+          }
+        }
       }
     } catch (e) {}
 

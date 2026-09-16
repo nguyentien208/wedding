@@ -4,6 +4,54 @@
  */
 
 const AdminService = {
+  // 0. Lấy danh sách tất cả Thiệp cưới
+  async getAllWeddings() {
+    let list = [CONFIG.SAMPLE_DATA.wedding];
+    const client = getSupabaseClient();
+    if (client) {
+      try {
+        const { data } = await client.from('weddings').select('*').order('created_at', { ascending: false });
+        if (data && data.length > 0) list = data;
+      } catch (e) {
+        console.warn('getAllWeddings warning:', e);
+      }
+    }
+
+    // Gộp thêm thiệp lưu ở localStorage
+    try {
+      const storedList = JSON.parse(localStorage.getItem('wedding_cards_list') || '[]');
+      storedList.forEach(c => {
+        if (!list.some(existing => existing.slug === c.slug)) {
+          list.push(c);
+        }
+      });
+    } catch (e) {}
+
+    return list;
+  },
+
+  // 0b. Tạo Thiệp cưới mới
+  async createWedding(newCard) {
+    const client = getSupabaseClient();
+    if (client) {
+      try {
+        await client.from('weddings').insert([newCard]);
+      } catch (e) {
+        console.warn('Supabase createWedding warning:', e);
+      }
+    }
+
+    // Lưu vào danh sách Local Storage
+    try {
+      const list = JSON.parse(localStorage.getItem('wedding_cards_list') || '[]');
+      list.unshift(newCard);
+      localStorage.setItem('wedding_cards_list', JSON.stringify(list));
+      localStorage.setItem('wedding_data_' + newCard.slug, JSON.stringify(newCard));
+    } catch (e) {}
+
+    return { success: true, data: newCard };
+  },
+
   // 1. Storage Upload Helper (Chỉ cho phép file ảnh/âm thanh hợp lệ)
   async uploadFile(bucket, filePath, file) {
     const client = getSupabaseClient();

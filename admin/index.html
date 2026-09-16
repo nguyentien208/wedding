@@ -84,11 +84,22 @@
     
     <!-- TOP HEADER -->
     <header class="admin-header">
-      <div style="display: flex; align-items: center; gap: 16px;">
+      <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
         <button id="admin-toggle-btn" class="admin-toggle-btn">
           <i class="fas fa-bars"></i>
         </button>
-        <h2 id="page-title" style="font-size: 1.1rem; font-weight: 700;">Tổng Quan Dashboard</h2>
+
+        <!-- Multi-Wedding Dropdown Selector -->
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <i class="fas fa-id-card text-wine" style="color: var(--admin-primary); font-size: 1.1rem;"></i>
+          <select id="admin-wedding-selector" class="btn-admin-secondary" style="padding: 8px 12px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; background: #FFFFFF; cursor: pointer;" onchange="handleSelectWeddingCard(this.value)">
+            <!-- JS Populates wedding cards -->
+          </select>
+        </div>
+
+        <button class="btn-admin btn-admin-primary btn-sm" onclick="openNewWeddingModal()">
+          <i class="fas fa-plus-circle"></i> THÊM THIỆP MỚI
+        </button>
       </div>
 
       <div style="display: flex; align-items: center; gap: 16px;">
@@ -556,6 +567,46 @@
         <div style="display: flex; justify-content: flex-end; gap: 12px;">
           <button type="button" class="btn-admin btn-admin-secondary" onclick="closeEventModal()">Hủy</button>
           <button type="submit" class="btn-admin btn-admin-primary">Lưu Sự Kiện</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL THÊM THIỆP CƯỚI MỚI -->
+  <div id="modal-new-wedding" class="admin-modal-overlay">
+    <div class="admin-modal" style="max-width: 480px;">
+      <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; color: var(--admin-primary); margin-bottom: 16px;">TẠO THIỆP CƯỚI MỚI</h3>
+      <form id="form-new-wedding">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+          <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Tên Chú Rể</label>
+            <input type="text" id="new-groom-name" class="btn-admin-secondary" style="width: 100%; padding: 8px; border-radius: 6px;" placeholder="Đức Anh" required oninput="autoGenerateSlug()">
+          </div>
+          <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Tên Cô Dâu</label>
+            <input type="text" id="new-bride-name" class="btn-admin-secondary" style="width: 100%; padding: 8px; border-radius: 6px;" placeholder="Phương Mai" required oninput="autoGenerateSlug()">
+          </div>
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Đường Dẫn URL Thiệp (Slug)</label>
+          <input type="text" id="new-wedding-slug" class="btn-admin-secondary" style="width: 100%; padding: 8px; border-radius: 6px;" placeholder="duc-anh-phuong-mai" required>
+          <small style="font-size: 0.75rem; color: var(--admin-text-muted);">Khách truy cập: <code>index.html?wedding=duc-anh-phuong-mai</code></small>
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Ngày Cưới (Dương Lịch)</label>
+          <input type="datetime-local" id="new-wedding-date" class="btn-admin-secondary" style="width: 100%; padding: 8px; border-radius: 6px;" required>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Địa Điểm Tiệc Cưới</label>
+          <input type="text" id="new-venue-name" class="btn-admin-secondary" style="width: 100%; padding: 8px; border-radius: 6px;" placeholder="Trung tâm tiệc cưới Trống Đồng">
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px;">
+          <button type="button" class="btn-admin btn-admin-secondary" onclick="closeNewWeddingModal()">Hủy</button>
+          <button type="submit" class="btn-admin btn-admin-primary"><i class="fas fa-plus-circle"></i> TẠO THIỆP MỚI</button>
         </div>
       </form>
     </div>

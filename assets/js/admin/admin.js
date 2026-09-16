@@ -16,21 +16,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const emailEl = document.getElementById('admin-user-email');
   if (emailEl) emailEl.textContent = activeSession.user.email;
 
-  // 2. Lấy thông tin Đám cưới mặc định
-  const slug = getCurrentWeddingSlug();
-  const weddingRes = await WeddingService.getWeddingBySlug(slug);
-  currentWedding = weddingRes.data;
-
-  if (currentWedding) {
-    // Cập nhật link Xem thiệp
-    const previewBtn = document.getElementById('btn-preview-wedding');
-    if (previewBtn) {
-      previewBtn.href = `../index.html?wedding=${currentWedding.slug}`;
-    }
-
-    // Load dữ liệu ban đầu cho Dashboard Overview
-    await loadDashboardOverview();
-  }
+  // 2. Load danh sách Thiệp Cưới & chọn Thiệp hiện tại
+  await loadWeddingCardsSelector();
 
   // 3. Gắn sự kiện chuyển Tab
   setupTabNavigation();
@@ -48,6 +35,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const formWedding = document.getElementById('form-wedding-info');
   if (formWedding) formWedding.addEventListener('submit', handleUpdateWedding);
 
+  const formNewWedding = document.getElementById('form-new-wedding');
+  if (formNewWedding) formNewWedding.addEventListener('submit', handleCreateNewWedding);
+
   const formStory = document.getElementById('form-story-modal');
   if (formStory) formStory.addEventListener('submit', handleCreateStory);
 
@@ -60,6 +50,123 @@ document.addEventListener('DOMContentLoaded', async () => {
   const formBank = document.getElementById('form-bank-info');
   if (formBank) formBank.addEventListener('submit', handleUpdateBank);
 });
+
+// MULTI-WEDDING CARD MANAGEMENT
+let allWeddingCards = [];
+
+async function loadWeddingCardsSelector(selectSlug = null) {
+  const selector = document.getElementById('admin-wedding-selector');
+  if (!selector) return;
+
+  allWeddingCards = await AdminService.getAllWeddings();
+  
+  if (allWeddingCards.length === 0) {
+    allWeddingCards = [CONFIG.SAMPLE_DATA.wedding];
+  }
+
+  selector.innerHTML = allWeddingCards.map(c => `
+    <option value="${c.slug}">${escapeHtml(c.groom_name)} ❤️ ${escapeHtml(c.bride_name)} (${c.slug})</option>
+  `).join('');
+
+  const targetSlug = selectSlug || getCurrentWeddingSlug() || allWeddingCards[0].slug;
+  selector.value = targetSlug;
+
+  await switchActiveWeddingCard(targetSlug);
+}
+
+async function switchActiveWeddingCard(slug) {
+  const weddingRes = await WeddingService.getWeddingBySlug(slug);
+  currentWedding = weddingRes.data;
+
+  if (currentWedding) {
+    const previewBtn = document.getElementById('btn-preview-wedding');
+    if (previewBtn) {
+      previewBtn.href = `../index.html?wedding=${currentWedding.slug}`;
+    }
+  }
+
+  const activeLink = document.querySelector('.admin-nav-link.active');
+  const activeTab = activeLink ? activeLink.getAttribute('data-tab') : 'dashboard';
+  await switchTab(activeTab);
+}
+
+async function handleSelectWeddingCard(slug) {
+  await switchActiveWeddingCard(slug);
+  showToast(`Đã chuyển sang thiệp cưới: ${currentWedding.groom_name} ❤️ ${currentWedding.bride_name}`);
+}
+
+function openNewWeddingModal() {
+  const modal = document.getElementById('modal-new-wedding');
+  if (modal) modal.classList.add('active');
+}
+
+function closeNewWeddingModal() {
+  const modal = document.getElementById('modal-new-wedding');
+  if (modal) modal.classList.remove('active');
+}
+
+function autoGenerateSlug() {
+  const gName = document.getElementById('new-groom-name').value;
+  const bName = document.getElementById('new-bride-name').value;
+  const slugInput = document.getElementById('new-wedding-slug');
+  
+  if (gName || bName) {
+    const combined = `${gName}-${bName}`.toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/đ/g, "d").replace(/Đ/g, "d")
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-");
+    slugInput.value = combined;
+  }
+}
+
+async function handleCreateNewWedding(e) {
+  e.preventDefault();
+  
+  const gName = document.getElementById('new-groom-name').value.trim();
+  const bName = document.getElementById('new-bride-name').value.trim();
+  const slug = document.getElementById('new-wedding-slug').value.trim().toLowerCase();
+  const dateVal = document.getElementById('new-wedding-date').value;
+  const venue = document.getElementById('new-venue-name').value.trim() || 'Khách sạn MiWedi';
+
+  let dateIso = new Date().toISOString();
+  if (dateVal) {
+    const d = new Date(dateVal);
+    if (!isNaN(d.getTime())) dateIso = d.toISOString();
+  }
+
+  const newCard = {
+    id: 'wedding-' + Date.now(),
+    slug: slug,
+    groom_name: gName,
+    bride_name: bName,
+    groom_title: 'GROOM',
+    bride_title: 'BRIDE',
+    groom_father: 'ÔNG PHẠM VĂN LONG',
+    groom_mother: 'BÀ LÊ THỊ HỒNG',
+    bride_father: 'ÔNG VŨ ĐÌNH NAM',
+    bride_mother: 'BÀ TRẦN THÚY HẰNG',
+    wedding_date: dateIso,
+    lunar_date: 'Tức ngày 25 tháng 02 năm Đinh Mùi',
+    venue_name: venue,
+    venue_address: venue,
+    hero_title: 'WE ARE GETTING MARRIED',
+    hero_image: './assets/img/banner.webp',
+    groom_image: './assets/img/men.webp',
+    bride_image: './assets/img/girl.webp',
+    intro_title: 'THƯ MỜI TIỆC CƯỚI',
+    intro_text: 'Chung tay dựng một mái nhà, / Sơn khuya có bạn, đường xa có cùng.',
+    video_url: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+  };
+
+  await AdminService.createWedding(newCard);
+  showToast(`🎉 Đã tạo thiệp cưới mới: ${gName} ❤️ ${bName} thành công!`);
+  closeNewWeddingModal();
+  e.target.reset();
+
+  await loadWeddingCardsSelector(slug);
+}
 
 // Chuyển đổi Tab trong Admin SPA
 function setupTabNavigation() {
