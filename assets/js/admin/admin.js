@@ -149,50 +149,82 @@ async function loadDashboardOverview() {
 
 // 2. CẶP ĐÔI (WEDDING FORM)
 function populateWeddingForm() {
-  if (!currentWedding) return;
-  document.getElementById('edit-groom-name').value = currentWedding.groom_name || '';
-  document.getElementById('edit-bride-name').value = currentWedding.bride_name || '';
+  if (!currentWedding) currentWedding = CONFIG.SAMPLE_DATA.wedding;
   
-  if (currentWedding.wedding_date) {
-    const d = new Date(currentWedding.wedding_date);
-    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-    document.getElementById('edit-wedding-date').value = d.toISOString().slice(0, 16);
+  const gName = document.getElementById('edit-groom-name');
+  const bName = document.getElementById('edit-bride-name');
+  const dateEl = document.getElementById('edit-wedding-date');
+  const videoEl = document.getElementById('edit-video-url');
+  const introEl = document.getElementById('edit-intro-text');
+
+  if (gName) gName.value = currentWedding.groom_name || 'Văn Tiến';
+  if (bName) bName.value = currentWedding.bride_name || 'Thu Hà';
+
+  if (dateEl && currentWedding.wedding_date) {
+    try {
+      const d = new Date(currentWedding.wedding_date);
+      if (!isNaN(d.getTime())) {
+        d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+        dateEl.value = d.toISOString().slice(0, 16);
+      }
+    } catch (e) {
+      console.warn('Date format warning:', e);
+    }
   }
 
-  document.getElementById('edit-video-url').value = currentWedding.video_url || '';
-  document.getElementById('edit-intro-text').value = currentWedding.intro_text || currentWedding.description || '';
+  if (videoEl) videoEl.value = currentWedding.video_url || 'https://www.youtube.com/embed/dQw4w9WgXcQ';
+  if (introEl) introEl.value = currentWedding.intro_text || currentWedding.description || 'Chung tay dựng một mái nhà, / Sơn khuya có bạn, đường xa có cùng.';
 }
 
 async function handleUpdateWedding(e) {
   e.preventDefault();
-  if (!currentWedding) return;
+  if (!currentWedding) currentWedding = CONFIG.SAMPLE_DATA.wedding;
 
   const submitBtn = e.target.querySelector('button[type="submit"]');
-  submitBtn.disabled = true;
-  submitBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Đang lưu...`;
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Đang lưu...`;
+  }
 
-  const updatedData = {
-    groom_name: document.getElementById('edit-groom-name').value.trim(),
-    bride_name: document.getElementById('edit-bride-name').value.trim(),
-    wedding_date: new Date(document.getElementById('edit-wedding-date').value).toISOString(),
-    video_url: document.getElementById('edit-video-url').value.trim(),
-    intro_text: document.getElementById('edit-intro-text').value.trim(),
-    description: document.getElementById('edit-intro-text').value.trim(),
-    hero_title: 'WE ARE GETTING MARRIED',
-    hero_image: currentWedding.hero_image
-  };
+  try {
+    const rawDate = document.getElementById('edit-wedding-date').value;
+    let weddingDateIso = currentWedding.wedding_date || new Date().toISOString();
+    
+    if (rawDate) {
+      const parsedDate = new Date(rawDate);
+      if (!isNaN(parsedDate.getTime())) {
+        weddingDateIso = parsedDate.toISOString();
+      }
+    }
 
-  const res = await AdminService.updateWeddingInfo(currentWedding.id, updatedData);
+    const updatedData = {
+      groom_name: document.getElementById('edit-groom-name').value.trim() || 'Văn Tiến',
+      bride_name: document.getElementById('edit-bride-name').value.trim() || 'Thu Hà',
+      wedding_date: weddingDateIso,
+      video_url: document.getElementById('edit-video-url').value.trim(),
+      intro_text: document.getElementById('edit-intro-text').value.trim(),
+      description: document.getElementById('edit-intro-text').value.trim(),
+      hero_title: 'WE ARE GETTING MARRIED',
+      hero_image: currentWedding.hero_image || './assets/img/banner.webp'
+    };
 
-  submitBtn.disabled = false;
-  submitBtn.innerHTML = `<i class="fas fa-save"></i> LƯU THAY ĐỔI ❤️`;
+    const res = await AdminService.updateWeddingInfo(currentWedding.id, updatedData);
 
-  if (res.success) {
-    showToast('Đã lưu thay đổi thông tin Cặp đôi thành công! ❤️');
-    // Refresh local cache
-    currentWedding = { ...currentWedding, ...updatedData };
-  } else {
-    showToast(`❌ Có lỗi xảy ra: ${res.error}`);
+    if (res.success) {
+      showToast('Đã lưu thay đổi thông tin Cặp đôi thành công! ❤️');
+      currentWedding = { ...currentWedding, ...updatedData };
+      loadDashboardOverview();
+    } else {
+      showToast(`❌ Có lỗi xảy ra: ${res.error || 'Vui lòng thử lại'}`);
+    }
+  } catch (err) {
+    console.error('handleUpdateWedding exception:', err);
+    showToast(`❌ Lỗi lưu dữ liệu: ${err.message}`);
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `<i class="fas fa-save"></i> LƯU THAY ĐỔI ❤️`;
+    }
   }
 }
 
