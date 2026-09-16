@@ -11,9 +11,9 @@ INSERT INTO weddings (
     wedding_date, hero_title, hero_image, intro_title, intro_text, video_url
 ) VALUES (
     'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',
-    'nguyen-a-nguyen-b',
-    'Nguyễn Văn Anh',
-    'Trần Thị Ngọc Bích',
+    'van-tien-thu-ha',
+    'Văn Tiến',
+    'Thu Hà',
     'Chú Rể',
     'Cô Dâu',
     '2026-12-20 11:00:00+07',

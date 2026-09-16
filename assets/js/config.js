@@ -9,14 +9,14 @@ const CONFIG = {
   // Điền Publishable Key / Anon Key của bạn vào bên dưới:
   SUPABASE_ANON_KEY: "sb_publishable_OcxFGTTerFY1-LlvICDD_A_8ixF15XP",
 
-  DEFAULT_SLUG: "minh-anh-khanh-huyen",
+  DEFAULT_SLUG: "van-tien-thu-ha",
 
   SAMPLE_DATA: {
     wedding: {
       id: "wedding-sample-giaodien",
-      slug: "minh-anh-khanh-huyen",
-      groom_name: "Minh Anh",
-      bride_name: "Khánh Huyền",
+      slug: "van-tien-thu-ha",
+      groom_name: "Văn Tiến",
+      bride_name: "Thu Hà",
       groom_title: "GROOM",
       bride_title: "BRIDE",
       groom_father: "PHẠM VĂN LONG",
@@ -37,17 +37,17 @@ const CONFIG = {
         "Chung tay dựng một mái nhà, / Sơn khuya có bạn, đường xa có cùng.",
       video_url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
       groom_qr:
-        "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=MUNG-CUOI-CHU-RE-MINH-ANH-MBBANK",
+        "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=MUNG-CUOI-CHU-RE-VAN-TIEN-MBBANK",
       bride_qr:
-        "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=MUNG-CUOI-CO-DAU-KHANH-HUYEN-VIETCOMBANK",
+        "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=MUNG-CUOI-CO-DAU-THU-HA-VIETCOMBANK",
       groom_bank: {
         bank_name: "MB Bank",
-        account_name: "MINH ANH",
+        account_name: "VAN TIEN",
         account_number: "1234 5678 9999",
       },
       bride_bank: {
         bank_name: "Vietcombank",
-        account_name: "KHANH HUYEN",
+        account_name: "THU HA",
         account_number: "9876 5432 1000",
       },
     },

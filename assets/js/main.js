@@ -96,7 +96,7 @@ function showPageLoading(isLoading) {
             <div class="loader-disc-icon">🎀</div>
           </div>
           <div class="loader-title">ĐANG TẢI THIỆP CƯỚI...</div>
-          <div class="loader-subtitle">Minh Anh ❤️ Khánh Huyền</div>
+          <div class="loader-subtitle">Văn Tiến ❤️ Thu Hà</div>
         </div>
       `;
       document.body.appendChild(loader);
