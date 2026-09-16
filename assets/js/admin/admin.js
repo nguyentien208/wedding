@@ -112,6 +112,7 @@ function customizeQRCode() {
   const bgColor = document.getElementById('qr-color-bg')?.value || '#FFFFFF';
   const dotsStyle = document.getElementById('qr-style-dots')?.value || 'rounded';
   const cornersStyle = document.getElementById('qr-style-corners')?.value || 'dot';
+  const exportSize = parseInt(document.getElementById('qr-export-size')?.value || '1000', 10);
 
   const container = document.getElementById('share-card-qr-canvas');
   if (!container) return;
@@ -120,11 +121,11 @@ function customizeQRCode() {
 
   if (typeof QRCodeStyling !== 'undefined') {
     qrCodeStylingInstance = new QRCodeStyling({
-      width: 108,
-      height: 108,
+      width: exportSize,
+      height: exportSize,
       type: "svg",
       data: fullShareUrl,
-      margin: 10,
+      margin: 15,
       qrOptions: {
         typeNumber: 0,
         mode: "Byte",

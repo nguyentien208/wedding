@@ -202,6 +202,16 @@
                   </select>
                 </div>
 
+                <!-- Export Size / Resolution Control -->
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <label for="qr-export-size" style="font-size: 0.8rem; font-weight: 600; color: #475569;">Độ nét ảnh tải:</label>
+                  <select id="qr-export-size" style="padding: 4px 8px; font-size: 0.8rem; border-radius: 6px; border: 1px solid var(--admin-border); background: #FAF8F5; cursor: pointer;" onchange="customizeQRCode()">
+                    <option value="1000">1000px (Siêu Nét HD - Khuyên Dùng)</option>
+                    <option value="2000">2000px (Cực Nét - In Thiệp Giấy)</option>
+                    <option value="600">600px (Tiêu Chuẩn)</option>
+                  </select>
+                </div>
+
                 <div style="margin-left: auto; font-size: 0.75rem; color: var(--admin-text-muted);">
                   <i class="fas fa-sparkles text-wine"></i> Mã QR cập nhật tức thì!
                 </div>
