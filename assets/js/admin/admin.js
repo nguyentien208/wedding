@@ -120,8 +120,8 @@ function customizeQRCode() {
 
   if (typeof QRCodeStyling !== 'undefined') {
     qrCodeStylingInstance = new QRCodeStyling({
-      width: 300,
-      height: 300,
+      width: 108,
+      height: 108,
       type: "svg",
       data: fullShareUrl,
       margin: 10,
