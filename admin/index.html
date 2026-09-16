@@ -202,6 +202,18 @@
                   </select>
                 </div>
 
+                <!-- QR Shape Frame Control -->
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <label for="qr-shape-frame" style="font-size: 0.8rem; font-weight: 700; color: var(--admin-primary);">
+                    <i class="fas fa-heart" style="color: #E11D48;"></i> Mẫu Khung Thiệp:
+                  </label>
+                  <select id="qr-shape-frame" style="padding: 4px 8px; font-size: 0.8rem; border-radius: 6px; border: 2px solid var(--admin-primary); background: #FFF1F2; font-weight: 700; color: #9F1239; cursor: pointer;" onchange="customizeQRCode()">
+                    <option value="heart" selected>❤️ Trái Tim Tình Yêu (Heart QR)</option>
+                    <option value="square">🔳 Khung Vuông Chuẩn (Standard)</option>
+                    <option value="circle">⭕ Khung Tròn Elegance (Circle)</option>
+                  </select>
+                </div>
+
                 <!-- Export Size / Resolution Control -->
                 <div style="display: flex; align-items: center; gap: 8px;">
                   <label for="qr-export-size" style="font-size: 0.8rem; font-weight: 600; color: #475569;">Độ nét ảnh tải:</label>

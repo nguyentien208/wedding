@@ -112,6 +112,7 @@ function customizeQRCode() {
   const bgColor = document.getElementById('qr-color-bg')?.value || '#FFFFFF';
   const dotsStyle = document.getElementById('qr-style-dots')?.value || 'rounded';
   const cornersStyle = document.getElementById('qr-style-corners')?.value || 'dot';
+  const shapeFrame = document.getElementById('qr-shape-frame')?.value || 'heart';
 
   const container = document.getElementById('share-card-qr-canvas');
   if (!container) return;
@@ -120,15 +121,15 @@ function customizeQRCode() {
 
   if (typeof QRCodeStyling !== 'undefined') {
     qrCodeStylingInstance = new QRCodeStyling({
-      width: 300,
-      height: 300,
+      width: 400,
+      height: 400,
       type: "canvas",
       data: fullShareUrl,
       margin: 10,
       qrOptions: {
         typeNumber: 0,
         mode: "Byte",
-        errorCorrectionLevel: "Q"
+        errorCorrectionLevel: "H"
       },
       dotsOptions: {
         color: dotsColor,
@@ -148,11 +149,71 @@ function customizeQRCode() {
     });
 
     qrCodeStylingInstance.append(container);
+
+    // If Heart shape or Circle shape selected, apply mask after render
+    setTimeout(() => {
+      applyShapeMaskToCanvas(container, shapeFrame, 300, bgColor);
+    }, 50);
   } else {
     // Fallback if library didn't load
     const fallbackUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(fullShareUrl)}`;
     container.innerHTML = `<img src="${fallbackUrl}" style="width:100%; height:100%; border-radius:8px;">`;
   }
+}
+
+function applyShapeMaskToCanvas(container, shape, displaySize, bgColor) {
+  const sourceCanvas = container.querySelector('canvas');
+  if (!sourceCanvas || shape === 'square') return;
+
+  const width = sourceCanvas.width;
+  const height = sourceCanvas.height;
+
+  // Create temporary offscreen canvas for masked output
+  const maskedCanvas = document.createElement('canvas');
+  maskedCanvas.width = width;
+  maskedCanvas.height = height;
+  const ctx = maskedCanvas.getContext('2d');
+
+  ctx.beginPath();
+
+  if (shape === 'heart') {
+    // Draw smooth Heart path mask
+    const topCurveHeight = height * 0.3;
+    ctx.moveTo(width / 2, height * 0.88);
+    // Left curve
+    ctx.bezierCurveTo(
+      width * 0.1, height * 0.55,
+      width * 0.02, height * 0.22,
+      width * 0.28, height * 0.08
+    );
+    ctx.bezierCurveTo(
+      width * 0.42, height * 0.02,
+      width / 2, height * 0.2,
+      width / 2, height * 0.28
+    );
+    // Right curve
+    ctx.bezierCurveTo(
+      width / 2, height * 0.2,
+      width * 0.58, height * 0.02,
+      width * 0.72, height * 0.08
+    );
+    ctx.bezierCurveTo(
+      width * 0.98, height * 0.22,
+      width * 0.9, height * 0.55,
+      width / 2, height * 0.88
+    );
+    ctx.closePath();
+  } else if (shape === 'circle') {
+    ctx.arc(width / 2, height / 2, width / 2 - 4, 0, Math.PI * 2);
+    ctx.closePath();
+  }
+
+  ctx.clip();
+  ctx.drawImage(sourceCanvas, 0, 0);
+
+  // Replace original canvas with masked canvas
+  container.innerHTML = '';
+  container.appendChild(maskedCanvas);
 }
 
 function downloadCardQRCode() {
@@ -164,19 +225,25 @@ function downloadCardQRCode() {
   const bgColor = document.getElementById('qr-color-bg')?.value || '#FFFFFF';
   const dotsStyle = document.getElementById('qr-style-dots')?.value || 'rounded';
   const cornersStyle = document.getElementById('qr-style-corners')?.value || 'dot';
+  const shapeFrame = document.getElementById('qr-shape-frame')?.value || 'heart';
   const exportSize = parseInt(document.getElementById('qr-export-size')?.value || '1000', 10);
 
   if (typeof QRCodeStyling !== 'undefined') {
+    const tempDiv = document.createElement('div');
+    tempDiv.style.position = 'absolute';
+    tempDiv.style.left = '-9999px';
+    document.body.appendChild(tempDiv);
+
     const highResQR = new QRCodeStyling({
       width: exportSize,
       height: exportSize,
       type: "canvas",
       data: fullShareUrl,
-      margin: 20,
+      margin: Math.round(exportSize * 0.05),
       qrOptions: {
         typeNumber: 0,
         mode: "Byte",
-        errorCorrectionLevel: "Q"
+        errorCorrectionLevel: "H"
       },
       dotsOptions: {
         color: dotsColor,
@@ -195,8 +262,47 @@ function downloadCardQRCode() {
       }
     });
 
-    highResQR.download({ name: `QR_Thiep_Cuoi_${currentSlug}`, extension: "png" });
-    showToast(`🚀 Đã tải xuống mã QR nét HD (${exportSize}px)!`);
+    highResQR.append(tempDiv);
+
+    setTimeout(() => {
+      const generatedCanvas = tempDiv.querySelector('canvas');
+      if (generatedCanvas && shapeFrame !== 'square') {
+        const maskedCanvas = document.createElement('canvas');
+        maskedCanvas.width = exportSize;
+        maskedCanvas.height = exportSize;
+        const ctx = maskedCanvas.getContext('2d');
+
+        ctx.beginPath();
+        if (shapeFrame === 'heart') {
+          const w = exportSize;
+          const h = exportSize;
+          ctx.moveTo(w / 2, h * 0.88);
+          ctx.bezierCurveTo(w * 0.1, h * 0.55, w * 0.02, h * 0.22, w * 0.28, h * 0.08);
+          ctx.bezierCurveTo(w * 0.42, h * 0.02, w / 2, h * 0.2, w / 2, h * 0.28);
+          ctx.bezierCurveTo(w / 2, h * 0.2, w * 0.58, h * 0.02, w * 0.72, h * 0.08);
+          ctx.bezierCurveTo(w * 0.98, h * 0.22, w * 0.9, h * 0.55, w / 2, h * 0.88);
+          ctx.closePath();
+        } else if (shapeFrame === 'circle') {
+          ctx.arc(exportSize / 2, exportSize / 2, exportSize / 2 - 10, 0, Math.PI * 2);
+          ctx.closePath();
+        }
+
+        ctx.clip();
+        ctx.drawImage(generatedCanvas, 0, 0);
+
+        // Trigger Download from Canvas DataURL
+        const link = document.createElement('a');
+        link.download = `QR_Trai_Tim_Thiep_Cuoi_${currentSlug}.png`;
+        link.href = maskedCanvas.toDataURL('image/png');
+        link.click();
+      } else {
+        highResQR.download({ name: `QR_Thiep_Cuoi_${currentSlug}`, extension: "png" });
+      }
+
+      document.body.removeChild(tempDiv);
+      showToast(`🚀 Đã tải xuống mã QR trái tim HD (${exportSize}px)!`);
+    }, 150);
+
   } else {
     const fallbackUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${exportSize}x${exportSize}&data=${encodeURIComponent(fullShareUrl)}`;
     const a = document.createElement('a');
