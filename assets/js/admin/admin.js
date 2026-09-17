@@ -621,9 +621,9 @@ async function handleUpdateWedding(e) {
     const updatedData = {
       groom_name: getVal('edit-groom-name') || 'Văn Tiến',
       bride_name: getVal('edit-bride-name') || 'Thu Hà',
-      groom_image: getVal('edit-groom-image') || './assets/img/men_v2.png',
-      bride_image: getVal('edit-bride-image') || './assets/img/girl_v2.png',
-      hero_image: getVal('edit-hero-image') || './assets/img/banner_v3.png',
+      groom_image: getVal('edit-groom-image') || './assets/img/men_v2.webp',
+      bride_image: getVal('edit-bride-image') || './assets/img/girl_v2.webp',
+      hero_image: getVal('edit-hero-image') || './assets/img/banner_v3.webp',
       groom_father: getVal('edit-groom-father') || 'ÔNG PHẠM VĂN LONG',
       groom_mother: getVal('edit-groom-mother') || 'BÀ LÊ THỊ HỒNG',
       bride_father: getVal('edit-bride-father') || 'ÔNG VŨ ĐÌNH NAM',
