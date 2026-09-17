@@ -641,6 +641,14 @@ a {
   font-weight: 400;
 }
 
+.address-title-img {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+  margin-bottom: 12px;
+  display: block;
+}
+
 .address-venue-title {
   font-family: var(--font-sans);
   font-size: 0.9rem;
