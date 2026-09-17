@@ -567,7 +567,7 @@ function populateWeddingForm() {
   setVal('edit-bride-name', currentWedding.bride_name || 'Thu Hà');
   setVal('edit-groom-image', currentWedding.groom_image || './assets/img/men.webp');
   setVal('edit-bride-image', currentWedding.bride_image || './assets/img/girl.webp');
-  setVal('edit-hero-image', currentWedding.hero_image || './assets/img/banner.webp');
+  setVal('edit-hero-image', currentWedding.hero_image || './assets/img/banner_v2.png');
 
   setVal('edit-groom-father', currentWedding.groom_father || 'ÔNG PHẠM VĂN LONG');
   setVal('edit-groom-mother', currentWedding.groom_mother || 'BÀ LÊ THỊ HỒNG');
@@ -623,7 +623,7 @@ async function handleUpdateWedding(e) {
       bride_name: getVal('edit-bride-name') || 'Thu Hà',
       groom_image: getVal('edit-groom-image') || './assets/img/men.webp',
       bride_image: getVal('edit-bride-image') || './assets/img/girl.webp',
-      hero_image: getVal('edit-hero-image') || './assets/img/banner.webp',
+      hero_image: getVal('edit-hero-image') || './assets/img/banner_v2.png',
       groom_father: getVal('edit-groom-father') || 'ÔNG PHẠM VĂN LONG',
       groom_mother: getVal('edit-groom-mother') || 'BÀ LÊ THỊ HỒNG',
       bride_father: getVal('edit-bride-father') || 'ÔNG VŨ ĐÌNH NAM',
