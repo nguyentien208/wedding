@@ -29,7 +29,7 @@ const CONFIG = {
       venue_name: "KHÁCH SẠN MIWEDI",
       venue_address: "Khách sạn MiWedi",
       hero_title: "WEDDING",
-      hero_image: "./assets/img/banner_v2.png",
+      hero_image: "./assets/img/banner_v3.png",
       groom_image: "./assets/img/men.webp",
       bride_image: "./assets/img/girl.webp",
       intro_title: "THƯ MỜI TIỆC CƯỚI",
