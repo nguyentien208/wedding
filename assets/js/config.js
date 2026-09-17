@@ -30,8 +30,8 @@ const CONFIG = {
       venue_address: "Khách sạn MiWedi",
       hero_title: "WEDDING",
       hero_image: "./assets/img/banner_v3.png",
-      groom_image: "./assets/img/men.webp",
-      bride_image: "./assets/img/girl.webp",
+      groom_image: "./assets/img/men_v2.png",
+      bride_image: "./assets/img/girl_v2.png",
       intro_title: "THƯ MỜI TIỆC CƯỚI",
       intro_text:
         "Chung tay dựng một mái nhà, / Sơn khuya có bạn, đường xa có cùng.",
