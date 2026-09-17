@@ -163,9 +163,30 @@ a {
   animation: eqBar3 0.7s ease-in-out infinite alternate;
 }
 
-@keyframes eqBar1 { 0% { height: 30%; } 100% { height: 100%; } }
-@keyframes eqBar2 { 0% { height: 100%; } 100% { height: 20%; } }
-@keyframes eqBar3 { 0% { height: 40%; } 100% { height: 90%; } }
+@keyframes eqBar1 {
+  0% {
+    height: 30%;
+  }
+  100% {
+    height: 100%;
+  }
+}
+@keyframes eqBar2 {
+  0% {
+    height: 100%;
+  }
+  100% {
+    height: 20%;
+  }
+}
+@keyframes eqBar3 {
+  0% {
+    height: 40%;
+  }
+  100% {
+    height: 90%;
+  }
+}
 
 /* ==========================================
    1. HERO PHOTO & WHITE DOME ARCH CARD
@@ -650,7 +671,7 @@ a {
 }
 
 .address-venue-title {
-  font-family: var(--font-sans);
+  font-family: "Playfair Display", serif;
   font-size: 0.9rem;
   font-weight: 700;
   color: #000000;
@@ -1205,7 +1226,6 @@ a {
   color: #111111;
 }
 
-
 .radio-text {
   font-size: 0.88rem;
   color: #333333;
@@ -1254,7 +1274,7 @@ a {
   bottom: 0;
   width: 50%;
   height: 100%;
-  background: #FAF8F5; /* Soft luxury cream ivory color */
+  background: #faf8f5; /* Soft luxury cream ivory color */
   z-index: 1;
   transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
   box-shadow: inset 0 0 40px rgba(121, 11, 11, 0.05);
@@ -1280,7 +1300,9 @@ a {
   color: var(--color-primary);
   font-family: var(--font-serif);
   text-align: center;
-  transition: opacity 0.35s ease, transform 0.4s ease;
+  transition:
+    opacity 0.35s ease,
+    transform 0.4s ease;
 }
 
 .loader-disc-wrapper {
@@ -1304,27 +1326,35 @@ a {
 }
 
 @keyframes loaderSpin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes loaderPulse {
-  0% { transform: scale(0.92); }
-  100% { transform: scale(1.08); }
+  0% {
+    transform: scale(0.92);
+  }
+  100% {
+    transform: scale(1.08);
+  }
 }
 
 .loader-title {
   font-size: 1.15rem;
   letter-spacing: 0.15em;
   font-weight: 600;
-  color: #790B0B;
+  color: #790b0b;
   margin-bottom: 6px;
 }
 
 .loader-subtitle {
   font-family: var(--font-script);
   font-size: 1.4rem;
-  color: #790B0B;
+  color: #790b0b;
   opacity: 0.85;
 }
 
@@ -1345,4 +1375,3 @@ a {
 #page-loading-skeleton.doors-open .loader-door-right {
   transform: translateX(100%);
 }
-
