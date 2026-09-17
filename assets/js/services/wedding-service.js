@@ -107,24 +107,34 @@ const WeddingService = {
 
   // 5. Lấy thông tin Nhạc nền đang bật
   async getMusic(weddingId) {
+    let musicData = CONFIG.SAMPLE_DATA.music;
     const client = getSupabaseClient();
-    if (!client) return { data: CONFIG.SAMPLE_DATA.music, error: null };
+    
+    if (client) {
+      try {
+        const { data, error } = await client
+          .from('music')
+          .select('*')
+          .eq('wedding_id', weddingId)
+          .eq('enabled', true)
+          .limit(1)
+          .single();
 
-    try {
-      const { data, error } = await client
-        .from('music')
-        .select('*')
-        .eq('wedding_id', weddingId)
-        .eq('enabled', true)
-        .limit(1)
-        .single();
-
-      if (error && error.code !== 'PGRST116') throw error;
-      return { data: data || null, error: null };
-    } catch (err) {
-      console.warn('Fetch music error:', err.message);
-      return { data: CONFIG.SAMPLE_DATA.music, error: err };
+        if (data) musicData = data;
+      } catch (err) {
+        console.warn('Fetch music error:', err.message);
+      }
     }
+
+    // Kiểm tra bản lưu cài đặt nhạc trong LocalStorage
+    try {
+      const stored = JSON.parse(localStorage.getItem('wedding_custom_data') || '{}');
+      if (stored && stored.music) {
+        musicData = stored.music;
+      }
+    } catch (e) {}
+
+    return { data: musicData, error: null };
   },
 
   // 6. Lấy thông tin Ngân hàng mừng cưới (Bank accounts)

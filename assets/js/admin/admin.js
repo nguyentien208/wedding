@@ -1011,14 +1011,42 @@ async function handleCreateEvent(e) {
 }
 
 // 10. MUSIC FORM HANDLERS
-function populateMusicForm() {
+async function populateMusicForm() {
+  if (!currentWedding) return;
+
   const titleEl = document.getElementById('edit-music-title');
   const urlEl = document.getElementById('edit-music-url');
   const enabledEl = document.getElementById('edit-music-enabled');
+  const presetSelect = document.getElementById('preset-music-select');
 
-  if (titleEl) titleEl.value = 'Love Song';
-  if (urlEl) urlEl.value = './assets/music/love.mp3';
-  if (enabledEl) enabledEl.checked = true;
+  // Lấy dữ liệu nhạc hiện tại từ WeddingService / LocalStorage
+  const res = await WeddingService.getMusic(currentWedding.id);
+  const music = res.data || { title: 'Love Song', audio_url: './assets/music/love.mp3', enabled: true };
+
+  if (titleEl) titleEl.value = music.title || 'Love Song';
+  if (urlEl) urlEl.value = music.audio_url || './assets/music/love.mp3';
+  if (enabledEl) enabledEl.checked = music.enabled !== false;
+
+  if (presetSelect) {
+    if (music.audio_url === './assets/music/love.mp3' || music.audio_url === './assets/music/50namvesau.mp3') {
+      presetSelect.value = music.audio_url;
+    } else {
+      presetSelect.value = 'custom';
+    }
+  }
+}
+
+function onSelectPresetMusic(val) {
+  const titleEl = document.getElementById('edit-music-title');
+  const urlEl = document.getElementById('edit-music-url');
+
+  if (val === './assets/music/love.mp3') {
+    if (titleEl) titleEl.value = 'Love Song';
+    if (urlEl) urlEl.value = './assets/music/love.mp3';
+  } else if (val === './assets/music/50namvesau.mp3') {
+    if (titleEl) titleEl.value = '50 Năm Về Sau';
+    if (urlEl) urlEl.value = './assets/music/50namvesau.mp3';
+  }
 }
 
 async function handleUpdateMusic(e) {

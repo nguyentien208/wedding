@@ -538,6 +538,15 @@
             </p>
             
             <div style="margin-bottom: 16px;">
+              <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Chọn bài hát sẵn có:</label>
+              <select id="preset-music-select" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px; font-weight: 600; cursor: pointer;" onchange="onSelectPresetMusic(this.value)">
+                <option value="./assets/music/love.mp3">🎵 Bài nhạc 1: Love Song (love.mp3)</option>
+                <option value="./assets/music/50namvesau.mp3">🎵 Bài nhạc 2: 50 Năm Về Sau (50namvesau.mp3)</option>
+                <option value="custom">✏️ Nhập đường dẫn nhạc tùy chỉnh...</option>
+              </select>
+            </div>
+
+            <div style="margin-bottom: 16px;">
               <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Tên bài hát</label>
               <input type="text" id="edit-music-title" class="btn-admin-secondary" style="width: 100%; padding: 10px; border-radius: 6px;" placeholder="Love Song" required>
             </div>
