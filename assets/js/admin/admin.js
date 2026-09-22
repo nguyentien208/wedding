@@ -698,9 +698,10 @@ function populateWeddingForm() {
   setVal(
     "edit-intro-text",
     currentWedding.intro_text ||
-      currentWedding.description ||
       "Chung tay dựng một mái nhà, / Sơn khuya có bạn, đường xa có cùng.",
   );
+
+  updateImagePreviews();
 
   const dateEl = document.getElementById("edit-wedding-date");
   if (dateEl && currentWedding.wedding_date) {
@@ -1308,6 +1309,7 @@ async function uploadSingleImageFile(inputEl, targetInputId = null, refreshPicke
     if (inputId) {
       const targetInput = document.getElementById(inputId);
       if (targetInput) targetInput.value = uploadedUrl;
+      updateImagePreviews();
     }
 
     showToast("Tải ảnh lên thành công! ✨");
@@ -1339,6 +1341,7 @@ function selectMediaPickerImage(url) {
   if (currentTargetInputId) {
     const input = document.getElementById(currentTargetInputId);
     if (input) input.value = url;
+    updateImagePreviews();
   }
   showToast("Đã chọn ảnh thành công! 🖼️");
   closeMediaPicker();
