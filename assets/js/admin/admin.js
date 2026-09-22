@@ -1321,6 +1321,8 @@ function updateImagePreviews() {
   });
 }
 
+let customUploadedMedia = [];
+
 async function uploadSingleImageFile(inputEl, targetInputId = null, refreshPicker = false) {
   if (!inputEl.files || inputEl.files.length === 0) return;
   const file = inputEl.files[0];
@@ -1328,6 +1330,9 @@ async function uploadSingleImageFile(inputEl, targetInputId = null, refreshPicke
   try {
     showToast("Đang tải ảnh lên... ⏳");
     const uploadedUrl = await AdminService.uploadSingleImage(file, "images");
+
+    // Lưu vào bộ nhớ local để hiển thị ngay trong Media Picker
+    customUploadedMedia.unshift({ title: file.name.replace(/\.[^/.]+$/, ""), url: uploadedUrl });
 
     const inputId = targetInputId || currentTargetInputId;
     if (inputId) {
@@ -1402,11 +1407,11 @@ async function renderMediaPickerGrid() {
     } catch (e) {}
   }
 
-  const allMedia = [...presetImages, ...galleryImages];
+  const allMedia = [...customUploadedMedia, ...presetImages, ...galleryImages];
 
   grid.innerHTML = allMedia.map(item => `
     <div onclick="selectMediaPickerImage('${item.url}')" style="cursor: pointer; border-radius: 8px; overflow: hidden; border: 2px solid var(--admin-border); background: #FFF; transition: transform 0.2s, border-color 0.2s; position: relative; aspect-ratio: 1;" onmouseover="this.style.borderColor='var(--admin-primary)'; this.style.transform='scale(1.03)';" onmouseout="this.style.borderColor='var(--admin-border)'; this.style.transform='scale(1)';">
-      <img src="${item.url}" style="width: 100%; height: 100%; object-fit: cover;" alt="${item.title}">
+      <img src="${item.url}" style="width: 100%; height: 100%; object-fit: cover;" alt="${item.title}" onerror="this.onerror=null; this.src='./assets/img/banner_v3.png';">
       <div style="position: absolute; bottom: 0; inset-x: 0; background: rgba(0,0,0,0.6); color: #FFF; font-size: 0.7rem; padding: 4px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
         ${item.title}
       </div>
