@@ -670,6 +670,22 @@ function populateWeddingForm() {
     "edit-hero-image",
     currentWedding.hero_image || "./assets/img/banner_v3.png",
   );
+  setVal(
+    "edit-love-image",
+    currentWedding.love_image || "./assets/img/anh2.png",
+  );
+  setVal(
+    "edit-time-image",
+    currentWedding.time_image || "./assets/img/anh_time.png",
+  );
+  setVal(
+    "edit-address-image",
+    currentWedding.address_image || "./assets/img/anh_address.png",
+  );
+  setVal(
+    "edit-ending-image",
+    currentWedding.ending_image || "./assets/img/anh_ket.png",
+  );
 
   updateImagePreviews();
 
@@ -745,13 +761,17 @@ async function handleUpdateWedding(e) {
     const updatedData = {
       groom_name: getVal("edit-groom-name") || "Văn Tiến",
       bride_name: getVal("edit-bride-name") || "Thu Hà",
-      groom_image: getVal("edit-groom-image") || "./assets/img/men_v2.webp",
-      bride_image: getVal("edit-bride-image") || "./assets/img/girl_v2.webp",
-      hero_image: getVal("edit-hero-image") || "./assets/img/banner_v3.webp",
-      groom_father: getVal("edit-groom-father") || "ÔNG NGUYỄN VĂN THẠCH",
-      groom_mother: getVal("edit-groom-mother") || "BÀ DƯ THỊ THỎA",
-      bride_father: getVal("edit-bride-father") || "ÔNG NGÔ VĂN CẢNH",
-      bride_mother: getVal("edit-bride-mother") || "BÀ PHẠM THỊ HUYỀN",
+      groom_image: getVal("edit-groom-image") || "./assets/img/men_v2.png",
+      bride_image: getVal("edit-bride-image") || "./assets/img/girl_v2.png",
+      hero_image: getVal("edit-hero-image") || "./assets/img/banner_v3.png",
+      love_image: getVal("edit-love-image") || "./assets/img/anh2.png",
+      time_image: getVal("edit-time-image") || "./assets/img/anh_time.png",
+      address_image: getVal("edit-address-image") || "./assets/img/anh_address.png",
+      ending_image: getVal("edit-ending-image") || "./assets/img/anh_ket.png",
+      groom_father: getVal("edit-groom-father") || "ÔNG PHẠM VĂN LONG",
+      groom_mother: getVal("edit-groom-mother") || "BÀ LÊ THỊ HỒNG",
+      bride_father: getVal("edit-bride-father") || "ÔNG VŨ ĐÌNH NAM",
+      bride_mother: getVal("edit-bride-mother") || "BÀ TRẦN THÚY HẰNG",
       wedding_date: weddingDateIso,
       lunar_date:
         getVal("edit-lunar-date") || "Tức ngày 25 tháng 02 năm Đinh Mùi",
@@ -1311,6 +1331,10 @@ function updateImagePreviews() {
     { inputId: "edit-groom-image", previewId: "preview-groom-image", defaultSrc: "../assets/img/men_v2.png" },
     { inputId: "edit-bride-image", previewId: "preview-bride-image", defaultSrc: "../assets/img/girl_v2.png" },
     { inputId: "edit-hero-image", previewId: "preview-hero-image", defaultSrc: "../assets/img/banner_v3.png" },
+    { inputId: "edit-love-image", previewId: "preview-love-image", defaultSrc: "../assets/img/anh2.png" },
+    { inputId: "edit-time-image", previewId: "preview-time-image", defaultSrc: "../assets/img/anh_time.png" },
+    { inputId: "edit-address-image", previewId: "preview-address-image", defaultSrc: "../assets/img/anh_address.png" },
+    { inputId: "edit-ending-image", previewId: "preview-ending-image", defaultSrc: "../assets/img/anh_ket.png" },
     { inputId: "edit-groom-qr-url", previewId: "preview-groom-qr-url", defaultSrc: "" },
     { inputId: "edit-bride-qr-url", previewId: "preview-bride-qr-url", defaultSrc: "" }
   ];

@@ -149,6 +149,19 @@ function renderWeddingInfo(w) {
   const heroImg = document.querySelector('.hero-photo-img');
   if (heroImg && w.hero_image) heroImg.src = w.hero_image;
 
+  // Fixed Section Images (LOVE, Time/Calendar, Address, Ending)
+  const loveImg = document.querySelector('.love-main-img');
+  if (loveImg && w.love_image) loveImg.src = w.love_image;
+
+  const timeImg = document.querySelector('.dome-calendar-img');
+  if (timeImg && w.time_image) timeImg.src = w.time_image;
+
+  const addressImg = document.querySelector('.address-photo-img');
+  if (addressImg && w.address_image) addressImg.src = w.address_image;
+
+  const endingImg = document.querySelector('.bottom-hero-img');
+  if (endingImg && w.ending_image) endingImg.src = w.ending_image;
+
   // Portrait Cards
   const groomPortName = document.getElementById('groom-portrait-name');
   const bridePortName = document.getElementById('bride-portrait-name');

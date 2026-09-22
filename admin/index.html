@@ -351,6 +351,75 @@
                   </div>
                 </div>
               </div>
+
+              <!-- Additional Fixed Card Photos -->
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Ảnh Mục L.O.V.E (Chữ L.O.V.E)</label>
+                <input type="hidden" id="edit-love-image">
+                <div style="display: flex; items-center; gap: 12px; background: #FAF8F5; padding: 10px; border-radius: 8px; border: 1px solid var(--admin-border);">
+                  <img id="preview-love-image" src="../assets/img/anh2.png" alt="Ảnh L.O.V.E" style="width: 70px; height: 70px; object-fit: cover; border-radius: 8px; border: 1px solid var(--admin-border); background: #FFF;" onerror="this.onerror=null; this.src='../assets/img/anh2.png'">
+                  <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <button type="button" class="btn-admin btn-admin-primary btn-sm" onclick="openMediaPicker('edit-love-image')">
+                      <i class="fas fa-folder-open"></i> Chọn Thư viện
+                    </button>
+                    <label class="btn-admin btn-admin-secondary btn-sm" style="margin:0; cursor:pointer;">
+                      <i class="fas fa-upload"></i> Tải từ máy
+                      <input type="file" accept="image/*" style="display:none;" onchange="uploadSingleImageFile(this, 'edit-love-image')">
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Ảnh Lịch Thời Gian (Vòm Tròn)</label>
+                <input type="hidden" id="edit-time-image">
+                <div style="display: flex; items-center; gap: 12px; background: #FAF8F5; padding: 10px; border-radius: 8px; border: 1px solid var(--admin-border);">
+                  <img id="preview-time-image" src="../assets/img/anh_time.png" alt="Ảnh Thời Gian" style="width: 70px; height: 70px; object-fit: cover; border-radius: 8px; border: 1px solid var(--admin-border); background: #FFF;" onerror="this.onerror=null; this.src='../assets/img/anh_time.png'">
+                  <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <button type="button" class="btn-admin btn-admin-primary btn-sm" onclick="openMediaPicker('edit-time-image')">
+                      <i class="fas fa-folder-open"></i> Chọn Thư viện
+                    </button>
+                    <label class="btn-admin btn-admin-secondary btn-sm" style="margin:0; cursor:pointer;">
+                      <i class="fas fa-upload"></i> Tải từ máy
+                      <input type="file" accept="image/*" style="display:none;" onchange="uploadSingleImageFile(this, 'edit-time-image')">
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Ảnh Địa Điểm Tiệc Cưới</label>
+                <input type="hidden" id="edit-address-image">
+                <div style="display: flex; items-center; gap: 12px; background: #FAF8F5; padding: 10px; border-radius: 8px; border: 1px solid var(--admin-border);">
+                  <img id="preview-address-image" src="../assets/img/anh_address.png" alt="Ảnh Địa Điểm" style="width: 70px; height: 70px; object-fit: cover; border-radius: 8px; border: 1px solid var(--admin-border); background: #FFF;" onerror="this.onerror=null; this.src='../assets/img/anh_address.png'">
+                  <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <button type="button" class="btn-admin btn-admin-primary btn-sm" onclick="openMediaPicker('edit-address-image')">
+                      <i class="fas fa-folder-open"></i> Chọn Thư viện
+                    </button>
+                    <label class="btn-admin btn-admin-secondary btn-sm" style="margin:0; cursor:pointer;">
+                      <i class="fas fa-upload"></i> Tải từ máy
+                      <input type="file" accept="image/*" style="display:none;" onchange="uploadSingleImageFile(this, 'edit-address-image')">
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Ảnh Trang Kết Thiệp (Cảm ơn)</label>
+                <input type="hidden" id="edit-ending-image">
+                <div style="display: flex; items-center; gap: 12px; background: #FAF8F5; padding: 10px; border-radius: 8px; border: 1px solid var(--admin-border);">
+                  <img id="preview-ending-image" src="../assets/img/anh_ket.png" alt="Ảnh Trang Kết" style="width: 70px; height: 70px; object-fit: cover; border-radius: 8px; border: 1px solid var(--admin-border); background: #FFF;" onerror="this.onerror=null; this.src='../assets/img/anh_ket.png'">
+                  <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <button type="button" class="btn-admin btn-admin-primary btn-sm" onclick="openMediaPicker('edit-ending-image')">
+                      <i class="fas fa-folder-open"></i> Chọn Thư viện
+                    </button>
+                    <label class="btn-admin btn-admin-secondary btn-sm" style="margin:0; cursor:pointer;">
+                      <i class="fas fa-upload"></i> Tải từ máy
+                      <input type="file" accept="image/*" style="display:none;" onchange="uploadSingleImageFile(this, 'edit-ending-image')">
+                    </label>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <hr style="margin: 20px 0; border: none; border-top: 1px dashed var(--admin-border);">
