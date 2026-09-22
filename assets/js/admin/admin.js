@@ -1352,16 +1352,16 @@ async function renderMediaPickerGrid() {
 
   // Preset Local Images
   const presetImages = [
-    { title: 'Banner 3', url: './assets/img/banner_v3.webp' },
-    { title: 'Banner 2', url: './assets/img/banner_v2.webp' },
-    { title: 'Chú Rể V2', url: './assets/img/men_v2.webp' },
-    { title: 'Cô Dâu V2', url: './assets/img/girl_v2.webp' },
-    { title: 'Ảnh 2', url: './assets/img/anh2.webp' },
-    { title: 'Ảnh Địa Điểm', url: './assets/img/anh_address.webp' },
-    { title: 'Ảnh Thời Gian', url: './assets/img/anh_time.webp' },
-    { title: 'Ảnh Kết', url: './assets/img/anh_ket.webp' },
-    { title: 'Ảnh Gallery 1', url: './assets/img/gr1.webp' },
-    { title: 'Ảnh Gallery 2', url: './assets/img/gr2.webp' }
+    { title: 'Banner 3', url: './assets/img/banner_v3.png' },
+    { title: 'Banner 2', url: './assets/img/banner_v2.png' },
+    { title: 'Chú Rể V2', url: './assets/img/men_v2.png' },
+    { title: 'Cô Dâu V2', url: './assets/img/girl_v2.png' },
+    { title: 'Ảnh 2', url: './assets/img/anh2.png' },
+    { title: 'Ảnh Địa Điểm', url: './assets/img/anh_address.png' },
+    { title: 'Ảnh Thời Gian', url: './assets/img/anh_time.png' },
+    { title: 'Ảnh Kết', url: './assets/img/anh_ket.png' },
+    { title: 'Ảnh Gallery 1', url: './assets/img/gr1.png' },
+    { title: 'Ảnh Gallery 2', url: './assets/img/gr2.png' }
   ];
 
   // Fetch Supabase Gallery Uploads if available
