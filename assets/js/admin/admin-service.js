@@ -86,25 +86,80 @@ const AdminService = {
     if (error) console.warn('Warning deleting storage file:', error.message);
   },
 
-  // 2b. Single Image Upload (dùng cho Form chú rể, cô dâu, banner, qr, modal...)
+  // Helper nén ảnh tự động trên Trình duyệt client (chuyển sang WebP nét & nhẹ < 300KB)
+  async compressImageClientSide(file, maxWidth = 1600, quality = 0.82) {
+    // Nếu là SVG hoặc GIF nhỏ thì giữ nguyên
+    if (file.type === 'image/svg+xml' || file.type === 'image/gif') return file;
+
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxWidth || height > maxWidth) {
+            if (width > height) {
+              height = Math.round(height * (maxWidth / width));
+              width = maxWidth;
+            } else {
+              width = Math.round(width * (maxWidth / height));
+              height = maxWidth;
+            }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          canvas.toBlob(
+            (blob) => {
+              if (blob) {
+                const newFileName = file.name.replace(/\.[^/.]+$/, "") + ".webp";
+                const compressedFile = new File([blob], newFileName, {
+                  type: 'image/webp',
+                  lastModified: Date.now()
+                });
+                resolve(compressedFile);
+              } else {
+                resolve(file); // Fallback nếu nén lỗi
+              }
+            },
+            'image/webp',
+            quality
+          );
+        };
+        img.onerror = () => resolve(file);
+        img.src = e.target.result;
+      };
+      reader.onerror = () => resolve(file);
+      reader.readAsDataURL(file);
+    });
+  },
+
+  // 2b. Single Image Upload (Tự động nén WebP trước khi upload)
   async uploadSingleImage(file, folder = 'uploads') {
     if (!file) throw new Error('Chưa chọn tệp ảnh');
     const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/gif'];
     if (!allowedTypes.includes(file.type)) {
       throw new Error(`File ${file.name} không đúng định dạng ảnh (JPG, PNG, WEBP)`);
     }
-    if (file.size > 10 * 1024 * 1024) {
-      throw new Error(`File ${file.name} vượt quá dung lượng 10MB`);
-    }
+
+    // 🚀 Tự động nén ảnh client-side sang WebP (giảm 80%-95% dung lượng ngay trên browser)
+    const compressedFile = await this.compressImageClientSide(file, 1600, 0.82);
 
     const client = getSupabaseClient();
-    const fileExt = file.name.split('.').pop();
+    const fileExt = compressedFile.name.split('.').pop();
     const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
     const filePath = `${folder}/${fileName}`;
 
     if (client) {
       try {
-        const { publicUrl } = await this.uploadFile('wedding-images', filePath, file);
+        const { publicUrl } = await this.uploadFile('wedding-images', filePath, compressedFile);
         return publicUrl;
       } catch (err) {
         console.warn('Supabase uploadSingleImage error, using DataURL fallback:', err);
@@ -116,7 +171,7 @@ const AdminService = {
       const reader = new FileReader();
       reader.onload = (e) => resolve(e.target.result);
       reader.onerror = (e) => reject(new Error('Lỗi đọc file ảnh'));
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(compressedFile);
     });
   },
 
@@ -251,16 +306,16 @@ const AdminService = {
       if (!allowedTypes.includes(file.type)) {
         throw new Error(`File ${file.name} không đúng định dạng ảnh (chấp nhận JPG, PNG, WEBP)`);
       }
-      if (file.size > 10 * 1024 * 1024) {
-        throw new Error(`File ${file.name} vượt quá dung lượng 10MB`);
-      }
 
-      const fileExt = file.name.split('.').pop();
+      // Nén ảnh tự động trước khi đẩy lên Album Gallery
+      const compressedFile = await this.compressImageClientSide(file, 1600, 0.82);
+
+      const fileExt = compressedFile.name.split('.').pop();
       const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
       const filePath = `gallery/${weddingId}/${fileName}`;
 
       try {
-        const { publicUrl, storagePath } = await this.uploadFile('wedding-images', filePath, file);
+        const { publicUrl, storagePath } = await this.uploadFile('wedding-images', filePath, compressedFile);
         if (client) {
           await client.from('gallery').insert([{
             wedding_id: weddingId,
