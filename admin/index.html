@@ -305,41 +305,50 @@
               </div>
               <div>
                 <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Ảnh Chú Rể</label>
-                <div style="display: flex; gap: 8px;">
-                  <input type="text" id="edit-groom-image" class="btn-admin-secondary" style="flex: 1; padding: 10px; border-radius: 6px;" placeholder="./assets/img/men_v2.png">
-                  <button type="button" class="btn-admin btn-admin-primary btn-sm" onclick="openMediaPicker('edit-groom-image')">
-                    <i class="fas fa-folder-open"></i> Thư viện
-                  </button>
-                  <label class="btn-admin btn-admin-secondary btn-sm" style="margin:0; cursor:pointer;" title="Tải ảnh từ máy">
-                    <i class="fas fa-upload"></i> Tải lên
-                    <input type="file" accept="image/*" style="display:none;" onchange="uploadSingleImageFile(this, 'edit-groom-image')">
-                  </label>
+                <input type="hidden" id="edit-groom-image">
+                <div style="display: flex; items-center; gap: 12px; background: #FAF8F5; padding: 10px; border-radius: 8px; border: 1px solid var(--admin-border);">
+                  <img id="preview-groom-image" src="./assets/img/men_v2.png" alt="Ảnh Chú Rể" style="width: 70px; height: 70px; object-fit: cover; border-radius: 8px; border: 1px solid var(--admin-border); background: #FFF;" onerror="this.src='./assets/img/men_v2.png'">
+                  <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <button type="button" class="btn-admin btn-admin-primary btn-sm" onclick="openMediaPicker('edit-groom-image')">
+                      <i class="fas fa-folder-open"></i> Chọn từ Thư viện
+                    </button>
+                    <label class="btn-admin btn-admin-secondary btn-sm" style="margin:0; cursor:pointer;" title="Tải ảnh mới từ máy">
+                      <i class="fas fa-upload"></i> Tải ảnh từ máy
+                      <input type="file" accept="image/*" style="display:none;" onchange="uploadSingleImageFile(this, 'edit-groom-image')">
+                    </label>
+                  </div>
                 </div>
               </div>
               <div>
                 <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Ảnh Cô Dâu</label>
-                <div style="display: flex; gap: 8px;">
-                  <input type="text" id="edit-bride-image" class="btn-admin-secondary" style="flex: 1; padding: 10px; border-radius: 6px;" placeholder="./assets/img/girl_v2.png">
-                  <button type="button" class="btn-admin btn-admin-primary btn-sm" onclick="openMediaPicker('edit-bride-image')">
-                    <i class="fas fa-folder-open"></i> Thư viện
-                  </button>
-                  <label class="btn-admin btn-admin-secondary btn-sm" style="margin:0; cursor:pointer;" title="Tải ảnh từ máy">
-                    <i class="fas fa-upload"></i> Tải lên
-                    <input type="file" accept="image/*" style="display:none;" onchange="uploadSingleImageFile(this, 'edit-bride-image')">
-                  </label>
+                <input type="hidden" id="edit-bride-image">
+                <div style="display: flex; items-center; gap: 12px; background: #FAF8F5; padding: 10px; border-radius: 8px; border: 1px solid var(--admin-border);">
+                  <img id="preview-bride-image" src="./assets/img/girl_v2.png" alt="Ảnh Cô Dâu" style="width: 70px; height: 70px; object-fit: cover; border-radius: 8px; border: 1px solid var(--admin-border); background: #FFF;" onerror="this.src='./assets/img/girl_v2.png'">
+                  <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <button type="button" class="btn-admin btn-admin-primary btn-sm" onclick="openMediaPicker('edit-bride-image')">
+                      <i class="fas fa-folder-open"></i> Chọn từ Thư viện
+                    </button>
+                    <label class="btn-admin btn-admin-secondary btn-sm" style="margin:0; cursor:pointer;" title="Tải ảnh mới từ máy">
+                      <i class="fas fa-upload"></i> Tải ảnh từ máy
+                      <input type="file" accept="image/*" style="display:none;" onchange="uploadSingleImageFile(this, 'edit-bride-image')">
+                    </label>
+                  </div>
                 </div>
               </div>
               <div style="grid-column: 1/-1;">
                 <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Ảnh Hero Banner Trang Đầu</label>
-                <div style="display: flex; gap: 8px;">
-                  <input type="text" id="edit-hero-image" class="btn-admin-secondary" style="flex: 1; padding: 10px; border-radius: 6px;" placeholder="./assets/img/banner.webp">
-                  <button type="button" class="btn-admin btn-admin-primary btn-sm" onclick="openMediaPicker('edit-hero-image')">
-                    <i class="fas fa-folder-open"></i> Thư viện ảnh
-                  </button>
-                  <label class="btn-admin btn-admin-secondary btn-sm" style="margin:0; cursor:pointer;" title="Tải ảnh từ máy">
-                    <i class="fas fa-upload"></i> Tải ảnh lên
-                    <input type="file" accept="image/*" style="display:none;" onchange="uploadSingleImageFile(this, 'edit-hero-image')">
-                  </label>
+                <input type="hidden" id="edit-hero-image">
+                <div style="display: flex; items-center; gap: 16px; background: #FAF8F5; padding: 10px; border-radius: 8px; border: 1px solid var(--admin-border);">
+                  <img id="preview-hero-image" src="./assets/img/banner_v3.png" alt="Ảnh Banner" style="width: 140px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid var(--admin-border); background: #FFF;" onerror="this.src='./assets/img/banner_v3.png'">
+                  <div style="display: flex; gap: 8px; align-items: center;">
+                    <button type="button" class="btn-admin btn-admin-primary btn-sm" onclick="openMediaPicker('edit-hero-image')">
+                      <i class="fas fa-folder-open"></i> Chọn từ Thư viện ảnh
+                    </button>
+                    <label class="btn-admin btn-admin-secondary btn-sm" style="margin:0; cursor:pointer;" title="Tải ảnh mới từ máy">
+                      <i class="fas fa-upload"></i> Tải ảnh mới từ máy
+                      <input type="file" accept="image/*" style="display:none;" onchange="uploadSingleImageFile(this, 'edit-hero-image')">
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
@@ -621,15 +630,18 @@
               </div>
               <div>
                 <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Ảnh QR Mừng Cưới Chú Rể</label>
-                <div style="display: flex; gap: 8px;">
-                  <input type="text" id="edit-groom-qr-url" class="btn-admin-secondary" style="flex: 1; padding: 10px; border-radius: 6px;" placeholder="https://api.qrserver.com/...">
-                  <button type="button" class="btn-admin btn-admin-primary btn-sm" onclick="openMediaPicker('edit-groom-qr-url')">
-                    <i class="fas fa-folder-open"></i> Thư viện
-                  </button>
-                  <label class="btn-admin btn-admin-secondary btn-sm" style="margin:0; cursor:pointer;" title="Tải QR từ máy">
-                    <i class="fas fa-upload"></i> Tải QR
-                    <input type="file" accept="image/*" style="display:none;" onchange="uploadSingleImageFile(this, 'edit-groom-qr-url')">
-                  </label>
+                <input type="hidden" id="edit-groom-qr-url">
+                <div style="display: flex; items-center; gap: 12px; background: #FAF8F5; padding: 10px; border-radius: 8px; border: 1px solid var(--admin-border);">
+                  <img id="preview-groom-qr-url" src="" alt="QR Chú Rể" style="width: 70px; height: 70px; object-fit: contain; border-radius: 8px; border: 1px solid var(--admin-border); background: #FFF;" onerror="this.style.display='none'">
+                  <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <button type="button" class="btn-admin btn-admin-primary btn-sm" onclick="openMediaPicker('edit-groom-qr-url')">
+                      <i class="fas fa-folder-open"></i> Thư viện QR
+                    </button>
+                    <label class="btn-admin btn-admin-secondary btn-sm" style="margin:0; cursor:pointer;" title="Tải QR từ máy">
+                      <i class="fas fa-upload"></i> Tải QR từ máy
+                      <input type="file" accept="image/*" style="display:none;" onchange="uploadSingleImageFile(this, 'edit-groom-qr-url')">
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
@@ -652,15 +664,18 @@
               </div>
               <div>
                 <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Ảnh QR Mừng Cưới Cô Dâu</label>
-                <div style="display: flex; gap: 8px;">
-                  <input type="text" id="edit-bride-qr-url" class="btn-admin-secondary" style="flex: 1; padding: 10px; border-radius: 6px;" placeholder="https://api.qrserver.com/...">
-                  <button type="button" class="btn-admin btn-admin-primary btn-sm" onclick="openMediaPicker('edit-bride-qr-url')">
-                    <i class="fas fa-folder-open"></i> Thư viện
-                  </button>
-                  <label class="btn-admin btn-admin-secondary btn-sm" style="margin:0; cursor:pointer;" title="Tải QR từ máy">
-                    <i class="fas fa-upload"></i> Tải QR
-                    <input type="file" accept="image/*" style="display:none;" onchange="uploadSingleImageFile(this, 'edit-bride-qr-url')">
-                  </label>
+                <input type="hidden" id="edit-bride-qr-url">
+                <div style="display: flex; items-center; gap: 12px; background: #FAF8F5; padding: 10px; border-radius: 8px; border: 1px solid var(--admin-border);">
+                  <img id="preview-bride-qr-url" src="" alt="QR Cô Dâu" style="width: 70px; height: 70px; object-fit: contain; border-radius: 8px; border: 1px solid var(--admin-border); background: #FFF;" onerror="this.style.display='none'">
+                  <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <button type="button" class="btn-admin btn-admin-primary btn-sm" onclick="openMediaPicker('edit-bride-qr-url')">
+                      <i class="fas fa-folder-open"></i> Thư viện QR
+                    </button>
+                    <label class="btn-admin btn-admin-secondary btn-sm" style="margin:0; cursor:pointer;" title="Tải QR từ máy">
+                      <i class="fas fa-upload"></i> Tải QR từ máy
+                      <input type="file" accept="image/*" style="display:none;" onchange="uploadSingleImageFile(this, 'edit-bride-qr-url')">
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>

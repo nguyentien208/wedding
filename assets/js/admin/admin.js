@@ -671,6 +671,8 @@ function populateWeddingForm() {
     currentWedding.hero_image || "./assets/img/banner_v3.png",
   );
 
+  updateImagePreviews();
+
   setVal(
     "edit-groom-father",
     currentWedding.groom_father || "ÔNG NGUYỄN VĂN THẠCH",
@@ -1263,6 +1265,8 @@ function populateBankForm() {
   if (bQr)
     bQr.value =
       "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=MUNG-CUOI-CO-DAU-THU-HA-VIETCOMBANK";
+
+  updateImagePreviews();
 }
 
 async function handleUpdateBank(e) {
@@ -1295,6 +1299,28 @@ async function handleUpdateBank(e) {
 // 12. SMART MEDIA LIBRARY & SINGLE FILE UPLOAD HELPERS
 let currentTargetInputId = null;
 
+function updateImagePreviews() {
+  const list = [
+    { inputId: "edit-groom-image", previewId: "preview-groom-image" },
+    { inputId: "edit-bride-image", previewId: "preview-bride-image" },
+    { inputId: "edit-hero-image", previewId: "preview-hero-image" },
+    { inputId: "edit-groom-qr-url", previewId: "preview-groom-qr-url" },
+    { inputId: "edit-bride-qr-url", previewId: "preview-bride-qr-url" }
+  ];
+
+  list.forEach(({ inputId, previewId }) => {
+    const input = document.getElementById(inputId);
+    const preview = document.getElementById(previewId);
+    if (input && preview) {
+      const url = input.value.trim();
+      if (url) {
+        preview.src = url;
+        preview.style.display = "block";
+      }
+    }
+  });
+}
+
 async function uploadSingleImageFile(inputEl, targetInputId = null, refreshPicker = false) {
   if (!inputEl.files || inputEl.files.length === 0) return;
   const file = inputEl.files[0];
@@ -1307,6 +1333,7 @@ async function uploadSingleImageFile(inputEl, targetInputId = null, refreshPicke
     if (inputId) {
       const targetInput = document.getElementById(inputId);
       if (targetInput) targetInput.value = uploadedUrl;
+      updateImagePreviews();
     }
 
     showToast("Tải ảnh lên thành công! ✨");
@@ -1338,6 +1365,7 @@ function selectMediaPickerImage(url) {
   if (currentTargetInputId) {
     const input = document.getElementById(currentTargetInputId);
     if (input) input.value = url;
+    updateImagePreviews();
   }
   showToast("Đã chọn ảnh thành công! 🖼️");
   closeMediaPicker();
