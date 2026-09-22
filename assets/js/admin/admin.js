@@ -1299,22 +1299,30 @@ async function handleUpdateBank(e) {
 // 12. SMART MEDIA LIBRARY & SINGLE FILE UPLOAD HELPERS
 let currentTargetInputId = null;
 
+function resolveAdminAssetUrl(url) {
+  if (!url) return '';
+  if (url.startsWith('data:') || url.startsWith('http://') || url.startsWith('https://')) return url;
+  if (url.startsWith('./assets/')) return '../' + url.substring(2);
+  return url;
+}
+
 function updateImagePreviews() {
   const list = [
-    { inputId: "edit-groom-image", previewId: "preview-groom-image" },
-    { inputId: "edit-bride-image", previewId: "preview-bride-image" },
-    { inputId: "edit-hero-image", previewId: "preview-hero-image" },
-    { inputId: "edit-groom-qr-url", previewId: "preview-groom-qr-url" },
-    { inputId: "edit-bride-qr-url", previewId: "preview-bride-qr-url" }
+    { inputId: "edit-groom-image", previewId: "preview-groom-image", defaultSrc: "../assets/img/men_v2.png" },
+    { inputId: "edit-bride-image", previewId: "preview-bride-image", defaultSrc: "../assets/img/girl_v2.png" },
+    { inputId: "edit-hero-image", previewId: "preview-hero-image", defaultSrc: "../assets/img/banner_v3.png" },
+    { inputId: "edit-groom-qr-url", previewId: "preview-groom-qr-url", defaultSrc: "" },
+    { inputId: "edit-bride-qr-url", previewId: "preview-bride-qr-url", defaultSrc: "" }
   ];
 
-  list.forEach(({ inputId, previewId }) => {
+  list.forEach(({ inputId, previewId, defaultSrc }) => {
     const input = document.getElementById(inputId);
     const preview = document.getElementById(previewId);
     if (input && preview) {
       const url = input.value.trim();
-      if (url) {
-        preview.src = url;
+      const resolved = resolveAdminAssetUrl(url) || defaultSrc;
+      if (resolved) {
+        preview.src = resolved;
         preview.style.display = "block";
       }
     }
@@ -1382,18 +1390,18 @@ async function renderMediaPickerGrid() {
 
   grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--admin-text-muted); padding: 20px;"><i class="fas fa-spinner fa-spin"></i> Đang tải thư viện ảnh...</div>`;
 
-  // Preset Local Images
+  // Preset Local Images (Sử dụng đường dẫn ../assets/ cho trang Admin)
   const presetImages = [
-    { title: 'Banner 3', url: './assets/img/banner_v3.png' },
-    { title: 'Banner 2', url: './assets/img/banner_v2.png' },
-    { title: 'Chú Rể V2', url: './assets/img/men_v2.png' },
-    { title: 'Cô Dâu V2', url: './assets/img/girl_v2.png' },
-    { title: 'Ảnh 2', url: './assets/img/anh2.png' },
-    { title: 'Ảnh Địa Điểm', url: './assets/img/anh_address.png' },
-    { title: 'Ảnh Thời Gian', url: './assets/img/anh_time.png' },
-    { title: 'Ảnh Kết', url: './assets/img/anh_ket.png' },
-    { title: 'Ảnh Gallery 1', url: './assets/img/gr1.png' },
-    { title: 'Ảnh Gallery 2', url: './assets/img/gr2.png' }
+    { title: 'Banner 3', url: '../assets/img/banner_v3.png' },
+    { title: 'Banner 2', url: '../assets/img/banner_v2.png' },
+    { title: 'Chú Rể V2', url: '../assets/img/men_v2.png' },
+    { title: 'Cô Dâu V2', url: '../assets/img/girl_v2.png' },
+    { title: 'Ảnh 2', url: '../assets/img/anh2.png' },
+    { title: 'Ảnh Địa Điểm', url: '../assets/img/anh_address.png' },
+    { title: 'Ảnh Thời Gian', url: '../assets/img/anh_time.png' },
+    { title: 'Ảnh Kết', url: '../assets/img/anh_ket.png' },
+    { title: 'Ảnh Gallery 1', url: '../assets/img/gr1.png' },
+    { title: 'Ảnh Gallery 2', url: '../assets/img/gr2.png' }
   ];
 
   // Fetch Supabase Gallery Uploads if available
@@ -1402,19 +1410,22 @@ async function renderMediaPickerGrid() {
     try {
       const res = await WeddingService.getGallery(currentWedding.id);
       if (res && res.data) {
-        galleryImages = res.data.map(g => ({ title: g.caption || 'Album Ảnh', url: g.image_url }));
+        galleryImages = res.data.map(g => ({ title: g.caption || 'Album Ảnh', url: resolveAdminAssetUrl(g.image_url) }));
       }
     } catch (e) {}
   }
 
   const allMedia = [...customUploadedMedia, ...presetImages, ...galleryImages];
 
-  grid.innerHTML = allMedia.map(item => `
-    <div onclick="selectMediaPickerImage('${item.url}')" style="cursor: pointer; border-radius: 8px; overflow: hidden; border: 2px solid var(--admin-border); background: #FFF; transition: transform 0.2s, border-color 0.2s; position: relative; aspect-ratio: 1;" onmouseover="this.style.borderColor='var(--admin-primary)'; this.style.transform='scale(1.03)';" onmouseout="this.style.borderColor='var(--admin-border)'; this.style.transform='scale(1)';">
-      <img src="${item.url}" style="width: 100%; height: 100%; object-fit: cover;" alt="${item.title}" onerror="this.onerror=null; this.src='./assets/img/banner_v3.png';">
-      <div style="position: absolute; bottom: 0; inset-x: 0; background: rgba(0,0,0,0.6); color: #FFF; font-size: 0.7rem; padding: 4px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-        ${item.title}
+  grid.innerHTML = allMedia.map(item => {
+    const displayUrl = resolveAdminAssetUrl(item.url);
+    return `
+      <div onclick="selectMediaPickerImage('${item.url}')" style="cursor: pointer; border-radius: 8px; overflow: hidden; border: 2px solid var(--admin-border); background: #FFF; transition: transform 0.2s, border-color 0.2s; position: relative; aspect-ratio: 1;" onmouseover="this.style.borderColor='var(--admin-primary)'; this.style.transform='scale(1.03)';" onmouseout="this.style.borderColor='var(--admin-border)'; this.style.transform='scale(1)';">
+        <img src="${displayUrl}" style="width: 100%; height: 100%; object-fit: cover;" alt="${item.title}" onerror="this.onerror=null; this.src='../assets/img/banner_v3.png';">
+        <div style="position: absolute; bottom: 0; inset-x: 0; background: rgba(0,0,0,0.6); color: #FFF; font-size: 0.7rem; padding: 4px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+          ${item.title}
+        </div>
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
