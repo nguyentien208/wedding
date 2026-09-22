@@ -86,6 +86,40 @@ const AdminService = {
     if (error) console.warn('Warning deleting storage file:', error.message);
   },
 
+  // 2b. Single Image Upload (dùng cho Form chú rể, cô dâu, banner, qr, modal...)
+  async uploadSingleImage(file, folder = 'uploads') {
+    if (!file) throw new Error('Chưa chọn tệp ảnh');
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+      throw new Error(`File ${file.name} không đúng định dạng ảnh (JPG, PNG, WEBP)`);
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      throw new Error(`File ${file.name} vượt quá dung lượng 10MB`);
+    }
+
+    const client = getSupabaseClient();
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+    const filePath = `${folder}/${fileName}`;
+
+    if (client) {
+      try {
+        const { publicUrl } = await this.uploadFile('wedding-images', filePath, file);
+        return publicUrl;
+      } catch (err) {
+        console.warn('Supabase uploadSingleImage error, using DataURL fallback:', err);
+      }
+    }
+
+    // Fallback sang Base64 DataURL nếu Supabase storage chưa kết nối
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target.result);
+      reader.onerror = (e) => reject(new Error('Lỗi đọc file ảnh'));
+      reader.readAsDataURL(file);
+    });
+  },
+
   // 3. Cập nhật thông tin Cặp Đôi (Wedding)
   async updateWeddingInfo(id, formData) {
     const client = getSupabaseClient();

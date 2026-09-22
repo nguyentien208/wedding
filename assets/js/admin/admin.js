@@ -1292,3 +1292,97 @@ async function handleUpdateBank(e) {
   await AdminService.updateBank(currentWedding.id, bankData);
   showToast("Đã lưu thông tin chuyển khoản & QR mừng cưới! 💳");
 }
+
+// 12. SMART MEDIA LIBRARY & SINGLE FILE UPLOAD HELPERS
+let currentTargetInputId = null;
+
+async function uploadSingleImageFile(inputEl, targetInputId = null, refreshPicker = false) {
+  if (!inputEl.files || inputEl.files.length === 0) return;
+  const file = inputEl.files[0];
+
+  try {
+    showToast("Đang tải ảnh lên... ⏳");
+    const uploadedUrl = await AdminService.uploadSingleImage(file, "images");
+
+    const inputId = targetInputId || currentTargetInputId;
+    if (inputId) {
+      const targetInput = document.getElementById(inputId);
+      if (targetInput) targetInput.value = uploadedUrl;
+    }
+
+    showToast("Tải ảnh lên thành công! ✨");
+    inputEl.value = "";
+
+    if (refreshPicker || document.getElementById("modal-media-picker")?.classList.contains("active")) {
+      await renderMediaPickerGrid();
+    }
+  } catch (err) {
+    showToast(`❌ Lỗi tải ảnh: ${err.message}`);
+  }
+}
+
+async function openMediaPicker(targetInputId) {
+  currentTargetInputId = targetInputId;
+  const modal = document.getElementById("modal-media-picker");
+  if (!modal) return;
+
+  await renderMediaPickerGrid();
+  modal.classList.add("active");
+}
+
+function closeMediaPicker() {
+  const modal = document.getElementById("modal-media-picker");
+  if (modal) modal.classList.remove("active");
+}
+
+function selectMediaPickerImage(url) {
+  if (currentTargetInputId) {
+    const input = document.getElementById(currentTargetInputId);
+    if (input) input.value = url;
+  }
+  showToast("Đã chọn ảnh thành công! 🖼️");
+  closeMediaPicker();
+}
+
+async function renderMediaPickerGrid() {
+  const grid = document.getElementById("media-picker-grid");
+  if (!grid) return;
+
+  grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--admin-text-muted); padding: 20px;"><i class="fas fa-spinner fa-spin"></i> Đang tải thư viện ảnh...</div>`;
+
+  // Preset Local Images
+  const presetImages = [
+    { title: 'Banner 3', url: './assets/img/banner_v3.webp' },
+    { title: 'Banner 2', url: './assets/img/banner_v2.webp' },
+    { title: 'Chú Rể V2', url: './assets/img/men_v2.webp' },
+    { title: 'Cô Dâu V2', url: './assets/img/girl_v2.webp' },
+    { title: 'Ảnh 2', url: './assets/img/anh2.webp' },
+    { title: 'Ảnh Địa Điểm', url: './assets/img/anh_address.webp' },
+    { title: 'Ảnh Thời Gian', url: './assets/img/anh_time.webp' },
+    { title: 'Ảnh Kết', url: './assets/img/anh_ket.webp' },
+    { title: 'Ảnh Gallery 1', url: './assets/img/gr1.webp' },
+    { title: 'Ảnh Gallery 2', url: './assets/img/gr2.webp' }
+  ];
+
+  // Fetch Supabase Gallery Uploads if available
+  let galleryImages = [];
+  if (currentWedding) {
+    try {
+      const res = await WeddingService.getGallery(currentWedding.id);
+      if (res && res.data) {
+        galleryImages = res.data.map(g => ({ title: g.caption || 'Album Ảnh', url: g.image_url }));
+      }
+    } catch (e) {}
+  }
+
+  const allMedia = [...presetImages, ...galleryImages];
+
+  grid.innerHTML = allMedia.map(item => `
+    <div onclick="selectMediaPickerImage('${item.url}')" style="cursor: pointer; border-radius: 8px; overflow: hidden; border: 2px solid var(--admin-border); background: #FFF; transition: transform 0.2s, border-color 0.2s; position: relative; aspect-ratio: 1;" onmouseover="this.style.borderColor='var(--admin-primary)'; this.style.transform='scale(1.03)';" onmouseout="this.style.borderColor='var(--admin-border)'; this.style.transform='scale(1)';">
+      <img src="${item.url}" style="width: 100%; height: 100%; object-fit: cover;" alt="${item.title}">
+      <div style="position: absolute; bottom: 0; inset-x: 0; background: rgba(0,0,0,0.6); color: #FFF; font-size: 0.7rem; padding: 4px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+        ${item.title}
+      </div>
+    </div>
+  `).join('');
+}
